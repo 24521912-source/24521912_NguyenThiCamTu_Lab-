@@ -1,0 +1,65 @@
+
+/* Biến dùng chung cho toàn bộ ứng dụng */
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #f1f5ff;
+  background-color: #101827;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  --color-page: #101827;
+  --color-card: #1c2940;
+  --color-panel: #293a56;
+  --color-text: #f1f5ff;
+  --color-muted: #c0cce0;
+  --color-accent: #a8c7ff;
+  --color-border: #435571;
+
+  --radius-card: 24px;
+  --radius-panel: 14px;
+
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+}
+
+/* Reset cơ bản, tránh sai lệch kích thước */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 0;
+  min-height: 100vh;
+  background: var(--color-page);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Cấu trúc trang và tiêu đề */
+.page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 64px;
+}
+
+.pageTitle {
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: 64px 32px;
+  }
+}

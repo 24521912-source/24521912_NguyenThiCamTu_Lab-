@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Browser Tests</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main>
+      <h1>Browser Tests</h1>
+      <p>Open DevTools Console to see the results.</p>
+    </main>
+
+    <script type="module">
+      import { runEventTests } from "./events.browser.js";
+      import { runAppTests } from "./app.browser.js";
+
+      runEventTests();
+      runAppTests();
+    </script>
+  </body>
+</html>

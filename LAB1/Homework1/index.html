@@ -1,0 +1,637 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Portfolio of Nguyễn Thị Cẩm Tú, a third-year student at UIT, VNU-HCM, with a career interest in Data Engineering, data pipelines, and reliable data systems."
+  >
+
+  <title>Nguyễn Thị Cẩm Tú | Aspiring Data Engineer</title>
+
+  <!-- External styles and theme behavior -->
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+</head>
+
+<body>
+
+  <!-- ========================================
+       ACCESSIBLE SKIP NAVIGATION
+       ======================================== -->
+
+  <a href="#main-content" class="skip-link">
+    Skip to main content
+  </a>
+
+
+  <!-- ========================================
+       HEADER & NAVIGATION
+       ======================================== -->
+
+  <header id="top" class="site-header">
+
+    <a
+      href="#top"
+      class="site-logo"
+      aria-label="MyPortfolio. homepage"
+    >
+      MyPortfolio.
+    </a>
+
+    <nav
+      class="main-nav"
+      aria-label="Primary navigation"
+    >
+
+      <ul class="nav-list">
+
+        <li>
+          <a href="#home">Home</a>
+        </li>
+
+        <li>
+          <a href="#about">About</a>
+        </li>
+
+        <li>
+          <a href="#skills">Skills</a>
+        </li>
+
+        <li>
+          <a href="#projects">Projects</a>
+        </li>
+
+        <li>
+          <a href="#contact">Contact</a>
+        </li>
+
+      </ul>
+
+    </nav>
+
+    <!-- Accessible theme toggle; JavaScript updates the label and state -->
+    <button
+      type="button"
+      id="theme-toggle"
+      class="theme-toggle"
+      aria-label="Switch to dark mode"
+      aria-pressed="false"
+    >
+      Dark Mode
+    </button>
+
+  </header>
+
+
+  <!-- ========================================
+       MAIN CONTENT
+       ======================================== -->
+
+  <main id="main-content" tabindex="-1">
+
+
+    <!-- ======================================
+         HERO SECTION
+         ====================================== -->
+
+    <section
+      id="home"
+      class="hero-section"
+      aria-labelledby="hero-title"
+    >
+
+      <p class="hero-greeting">
+        Hello, welcome to my portfolio!
+      </p>
+
+      <h1 id="hero-title" class="hero-title">
+        <span class="hero-intro">Hi, I'm</span>
+        <span class="hero-name" lang="vi">
+          <span>Nguyễn Thị</span> <span>Cẩm Tú</span>
+        </span>
+        <span class="hero-alias">You can call me Chartlotte.</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Third-Year UIT Student |
+        Aspiring Data Engineer |
+        Data Pipeline Enthusiast
+      </p>
+
+      <p class="hero-description">
+        I am a third-year student at the University of Information
+        Technology (UIT), Vietnam National University Ho Chi Minh City.
+        I am pursuing a career in Data Engineering, with an interest in
+        turning raw data into reliable datasets for analytics
+        and informed decision-making.
+      </p>
+
+      <p class="hero-actions">
+
+        <a
+          href="#projects"
+          class="button button-primary"
+        >
+          Explore My Projects
+        </a>
+
+        <a
+          href="#contact"
+          class="button button-secondary"
+        >
+          Get In Touch
+        </a>
+
+      </p>
+
+      <!-- Personal portrait placeholder -->
+      <figure class="hero-portrait">
+
+        <img
+          src="assets/profile.jpg"
+          alt="Portrait of Nguyễn Thị Cẩm Tú"
+          width="400"
+          height="480"
+        >
+
+        <figcaption>
+          My personal portrait
+        </figcaption>
+
+      </figure>
+
+    </section>
+
+
+    <!-- ======================================
+         ABOUT ME SECTION
+         ====================================== -->
+
+    <section
+      id="about"
+      class="about-section"
+      aria-labelledby="about-title"
+    >
+
+      <h2 id="about-title">
+        About Me
+      </h2>
+
+      <p>
+        As a third-year student at UIT, VNU-HCM, I am developing
+        a foundation in programming, databases, and data processing.
+        I am especially interested in how Data Engineers collect,
+        transform, and organize data from different sources
+        into systems that people can trust.
+      </p>
+
+      <p>
+        My goal is to grow into a Data Engineer who builds reliable,
+        maintainable data pipelines. I want to deepen my knowledge of
+        Python, SQL, ETL/ELT workflows, data modeling, and data warehouses,
+        with a focus on data quality and clear documentation.
+        Through hands-on projects and collaboration, I hope to support
+        real-world analytics and business needs.
+      </p>
+
+      <h3>
+        What I Enjoy
+      </h3>
+
+      <ul class="interest-list">
+
+        <li>
+          Exploring Python and SQL for data processing
+        </li>
+
+        <li>
+          Learning to design and automate ETL/ELT data pipelines
+        </li>
+
+        <li>
+          Studying data modeling, data warehouses, and data quality
+        </li>
+
+        <li>
+          Collaborating on projects that turn data into useful insights
+        </li>
+
+      </ul>
+
+      <section
+        id="activities"
+        class="activities-section"
+        aria-labelledby="activities-title"
+      >
+
+        <h3 id="activities-title">
+          Activities &amp; Community
+        </h3>
+
+        <p>
+          A few moments from volunteering, student life,
+          and shared activities beyond the classroom.
+        </p>
+
+        <ul class="activity-gallery">
+
+          <li>
+            <figure>
+              <img
+                src="assets/hoatdong1.jpg"
+                alt="Student volunteers in yellow shirts during the Xuan Tinh Nguyen 2025 campaign"
+                width="1500"
+                height="1000"
+                loading="lazy"
+                decoding="async"
+              >
+              <figcaption>Spring Volunteer Campaign</figcaption>
+            </figure>
+          </li>
+
+          <li>
+            <figure>
+              <img
+                src="assets/hoatdong2.jpg"
+                alt="A student wearing a Computer Science shirt and carrying a matching tote bag"
+                width="2048"
+                height="1365"
+                loading="lazy"
+                decoding="async"
+              >
+              <figcaption>Computer Science Community</figcaption>
+            </figure>
+          </li>
+
+          <li>
+            <figure>
+              <img
+                src="assets/hoatdong3.jpg"
+                alt="A group in martial arts uniforms celebrating together at UIT"
+                width="2048"
+                height="1376"
+                loading="lazy"
+                decoding="async"
+              >
+              <figcaption>Martial Arts &amp; Team Spirit</figcaption>
+            </figure>
+          </li>
+
+        </ul>
+
+      </section>
+
+    </section>
+
+
+    <!-- ======================================
+         SKILLS SECTION
+         ====================================== -->
+
+    <section
+      id="skills"
+      class="skills-section"
+      aria-labelledby="skills-title"
+    >
+
+      <h2 id="skills-title">
+        Skills &amp; Learning
+      </h2>
+
+      <p class="section-description">
+        The foundations I am developing as a third-year UIT student
+        working toward a career in Data Engineering.
+      </p>
+
+      <!-- Skills Grid -->
+      <section
+        class="skills-grid"
+        aria-label="Skill categories"
+      >
+
+        <article class="skill-card">
+
+          <h3>
+            Python &amp; SQL
+          </h3>
+
+          <p>
+            Building programming and query skills to explore,
+            clean, and organize data.
+          </p>
+
+          <ul class="skill-list">
+            <li>Python fundamentals</li>
+            <li>SQL queries</li>
+            <li>Data cleaning</li>
+            <li>CSV &amp; JSON</li>
+          </ul>
+
+        </article>
+
+        <article class="skill-card">
+
+          <h3>
+            Data Pipelines
+          </h3>
+
+          <p>
+            Learning how data moves from source systems to
+            useful, reliable datasets.
+          </p>
+
+          <ul class="skill-list">
+            <li>ETL / ELT concepts</li>
+            <li>Data transformation</li>
+            <li>Quality checks</li>
+            <li>Workflow automation</li>
+          </ul>
+
+        </article>
+
+        <article class="skill-card">
+
+          <h3>
+            Databases &amp; Modeling
+          </h3>
+
+          <p>
+            Exploring how to structure and store data for
+            consistent queries and analytics.
+          </p>
+
+          <ul class="skill-list">
+            <li>Relational databases</li>
+            <li>PostgreSQL basics</li>
+            <li>Keys &amp; relationships</li>
+            <li>Star schema concepts</li>
+          </ul>
+
+        </article>
+
+        <article class="skill-card">
+
+          <h3>
+            Engineering Workflow
+          </h3>
+
+          <p>
+            Practicing version control, clear documentation,
+            and debugging through coursework and this portfolio.
+          </p>
+
+          <ul class="skill-list">
+            <li>Git &amp; GitHub</li>
+            <li>Documentation</li>
+            <li>Debugging</li>
+            <li>HTML / CSS / JavaScript</li>
+          </ul>
+
+        </article>
+
+      </section>
+
+    </section>
+
+
+    <!-- ======================================
+         FEATURED PROJECTS SECTION
+         ====================================== -->
+
+    <section
+      id="projects"
+      class="projects-section"
+      aria-labelledby="projects-title"
+    >
+
+      <h2 id="projects-title">
+        Projects &amp; Learning Plans
+      </h2>
+
+      <p class="section-description">
+        My current portfolio and two planned learning projects
+        for practicing data pipelines, data modeling, and SQL.
+      </p>
+
+      <!-- Project 1 -->
+      <article class="project-card">
+
+        <figure class="project-image">
+
+          <img
+            src="assets/project-data-pipeline.svg"
+            alt="Concept diagram showing source files flowing through Python validation into PostgreSQL"
+            width="800"
+            height="520"
+            loading="lazy"
+            decoding="async"
+          >
+
+          <figcaption>
+            Concept illustration: source to database
+          </figcaption>
+
+        </figure>
+
+        <p class="project-status">Planned learning project</p>
+
+        <h3>
+          Retail Sales Data Pipeline
+        </h3>
+
+        <p>
+          A project I plan to build using sample sales CSV files:
+          clean and validate records with Python, load them into
+          PostgreSQL, and write SQL summaries. The focus will be
+          handling missing values, duplicates, and repeatable loads.
+        </p>
+
+        <ul class="project-tech">
+          <li>Python</li>
+          <li>SQL</li>
+          <li>PostgreSQL</li>
+          <li>ETL</li>
+        </ul>
+
+      </article>
+
+
+      <!-- Project 2 -->
+      <article class="project-card">
+
+        <figure class="project-image">
+
+          <img
+            src="assets/project-data-warehouse.svg"
+            alt="Concept star schema connecting a sales fact table to customer, product, and date dimensions"
+            width="800"
+            height="520"
+            loading="lazy"
+            decoding="async"
+          >
+
+          <figcaption>
+            Concept illustration: sales star schema
+          </figcaption>
+
+        </figure>
+
+        <p class="project-status">Planned learning project</p>
+
+        <h3>
+          Sales Analytics Warehouse
+        </h3>
+
+        <p>
+          A planned modeling exercise using sample sales data.
+          I want to design fact and dimension tables, query sales
+          by product and time, and check that summary totals
+          match the source data.
+        </p>
+
+        <ul class="project-tech">
+          <li>SQL</li>
+          <li>Data modeling</li>
+          <li>Star schema</li>
+          <li>Data quality</li>
+        </ul>
+
+      </article>
+
+
+      <!-- Project 3 -->
+      <article class="project-card">
+
+        <figure class="project-image">
+
+          <img
+            src="assets/project-portfolio.svg"
+            alt="Illustrated portfolio layout with an introduction, skill cards, and project cards"
+            width="800"
+            height="520"
+            loading="lazy"
+            decoding="async"
+          >
+
+          <figcaption>
+            Illustrated layout of my personal portfolio
+          </figcaption>
+
+        </figure>
+
+        <p class="project-status">In progress</p>
+
+        <h3>
+          Personal Portfolio Website
+        </h3>
+
+        <p>
+          The website you are viewing, built with HTML, CSS, and
+          Vanilla JavaScript to introduce my background and
+          Data Engineering goals. I am practicing responsive
+          design, accessible markup, and version control with Git.
+        </p>
+
+        <ul class="project-tech">
+          <li>HTML5</li>
+          <li>CSS3</li>
+          <li>JavaScript</li>
+          <li>Git &amp; GitHub</li>
+        </ul>
+
+      </article>
+
+    </section>
+
+
+    <!-- ======================================
+         CONTACT SECTION
+         ====================================== -->
+
+    <section
+      id="contact"
+      class="contact-section"
+      aria-labelledby="contact-title"
+    >
+
+      <h2 id="contact-title">
+        Let's Connect
+      </h2>
+
+      <p>
+        I am always interested in learning,
+        collaborating, and exploring new
+        opportunities in technology.
+      </p>
+
+      <address class="contact-info">
+
+        <p>
+          Email:
+          <a href="mailto:nguyenthi864camtu@gmail.com">
+            nguyenthi864camtu@gmail.com
+          </a>
+        </p>
+
+        <p>
+          GitHub:
+          <a
+            href="https://github.com/24521912-source"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            24521912-source
+          </a>
+        </p>
+
+        <p>
+          LinkedIn:
+          <a
+            href="https://www.linkedin.com/in/c%E1%BA%A9m-t%C3%BA-nguy%E1%BB%85n-th%E1%BB%8B-097018442/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Nguyễn Thị Cẩm Tú
+          </a>
+        </p>
+
+      </address>
+
+    </section>
+
+  </main>
+
+
+  <!-- ========================================
+       FOOTER
+       ======================================== -->
+
+  <footer class="site-footer">
+
+    <p>
+      &copy; 2026 Your Name.
+      All rights reserved.
+    </p>
+
+    <p>
+      Built with HTML5, CSS3, and JavaScript.
+    </p>
+
+    <a href="#top" class="back-to-top">
+      Back to top
+    </a>
+
+  </footer>
+
+</body>
+</html>
