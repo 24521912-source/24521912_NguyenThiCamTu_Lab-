@@ -19,6 +19,8 @@ export default function PhotoCard({
           width={photo.width}
           height={photo.height}
           loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding={priority ? 'auto' : 'async'}
         />
       </button>
 

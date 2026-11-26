@@ -19,7 +19,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | T03 | URL-Based Category Filtering | DONE |
 | T04 | Native Dialog Lightbox | DONE |
 | T05 | Accessibility and Responsive UI | DONE |
-| T06 | Performance and Regression | TODO |
+| T06 | Performance and Regression | DONE |
 | T07 | Documentation and Defense | TODO |
 
 ## Application Contracts
@@ -204,7 +204,7 @@ All images are demonstration assets, not real evidence.
 
 ## T06 — Performance and Regression
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Optimize application performance and verify existing functionality.
 
