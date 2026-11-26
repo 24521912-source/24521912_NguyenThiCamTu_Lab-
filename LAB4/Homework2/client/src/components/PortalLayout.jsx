@@ -1,5 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { dossiers } from '../data/dossiers'
+import { useRouteFocus } from '../hooks/useRouteFocus'
+import './Accessibility.css'
 
 function getNavClass({ isActive }) {
   return isActive
@@ -8,15 +10,27 @@ function getNavClass({ isActive }) {
 }
 
 export default function PortalLayout() {
+  const mainRef = useRouteFocus()
+
   return (
     <div className="portal">
-      <a className="skip-link" href="#main-content">
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={(event) => {
+          event.preventDefault()
+          mainRef.current?.focus()
+        }}
+      >
         Skip to main content
       </a>
 
       <header className="portal-header">
         <div className="brand">
-          <span className="brand-icon" aria-hidden="true">
+          <span
+            className="brand-icon"
+            aria-hidden="true"
+          >
             FP
           </span>
 
@@ -24,6 +38,7 @@ export default function PortalLayout() {
             <p className="brand-title">
               Fair-Play Tribunal
             </p>
+
             <p className="brand-subtitle">
               Esports Appeal Portal
             </p>
@@ -38,7 +53,9 @@ export default function PortalLayout() {
       <div className="portal-body">
         <aside className="sidebar">
           <nav aria-label="Main navigation">
-            <p className="nav-heading">Workspace</p>
+            <p className="nav-heading">
+              Workspace
+            </p>
 
             <NavLink
               to="/"
@@ -65,6 +82,7 @@ export default function PortalLayout() {
         </aside>
 
         <main
+          ref={mainRef}
           id="main-content"
           className="main-content"
           tabIndex={-1}

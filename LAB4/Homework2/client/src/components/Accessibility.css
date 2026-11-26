@@ -1,0 +1,108 @@
+/* Keyboard focus */
+
+.portal :is(
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  [tabindex="0"]
+):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.portal .main-content:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.portal .skip-link {
+  min-height: 44px;
+  font-weight: 700;
+}
+
+/* Disabled controls */
+
+.portal button:disabled {
+  cursor: not-allowed;
+  opacity: 1;
+  background: #334155;
+  color: #cbd5e1;
+  border-color: #64748b;
+}
+
+.portal .appeal-field input:disabled,
+.portal .appeal-field select:disabled,
+.portal .appeal-field textarea:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Error and receipt readability */
+
+.portal .field-error {
+  color: #fecdd3;
+  overflow-wrap: anywhere;
+}
+
+.portal .receipt-id {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.portal .form-feedback p:last-child {
+  margin-bottom: 0;
+}
+
+/* Touch target and mobile layout */
+
+.portal .nav-link {
+  min-height: 44px;
+}
+
+.portal .checkbox-row label {
+  min-height: 24px;
+}
+
+@media (max-width: 400px) {
+  .portal-header {
+    flex-wrap: wrap;
+  }
+
+  .portal .sla-time-block strong {
+    font-size: 1.75rem;
+  }
+
+  .portal .matrix-summary {
+    flex-wrap: wrap;
+  }
+}
+
+/* Respect reduced motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .portal *,
+  .portal *::before,
+  .portal *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Support Windows High Contrast Mode */
+
+@media (forced-colors: active) {
+  .portal .button,
+  .portal .secondary-button,
+  .portal .nav-link,
+  .portal .status-badge,
+  .portal .sla-status {
+    border: 1px solid ButtonText;
+  }
+
+  .portal :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}

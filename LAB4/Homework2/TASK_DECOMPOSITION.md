@@ -19,7 +19,7 @@ All case records and evaluation values are fictional demonstration data. They do
 | T03 | Appeal Form Context and Validation | DONE |
 | T04 | Zero-Drift SLA Countdown Hook | DONE |
 | T05 | Full-Stack API and Persistence | DONE |
-| T06 | Accessibility and Regression Testing | TODO |
+| T06 | Accessibility and Regression Testing | DONE|
 | T07 | Documentation, Audit and Live Defense | TODO |
 
 Git history is the authoritative record of completed work.
@@ -331,7 +331,7 @@ Runtime storage files must not be committed to Git.
 
 ### T06 — Accessibility and Regression Testing
 
-**Status:** TODO
+**Status:** DOne
 
 **Prerequisite:** T05.
 

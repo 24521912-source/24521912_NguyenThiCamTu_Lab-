@@ -76,12 +76,14 @@ export default function AppealForm({
 }) {
   const headingID = useId()
   const acknowledgmentID = useId()
+  const submissionHintID = useId()
 
   const acknowledgmentErrorID =
     `${acknowledgmentID}-error`
 
   const {
     values,
+    errors,
     isValid,
     validationAttempted,
     submissionStatus,
@@ -105,8 +107,7 @@ export default function AppealForm({
     getFieldError('acknowledged')
 
   const evidenceRequired =
-    values.appealCategory ===
-      'evidence_review'
+    values.appealCategory === 'evidence_review'
 
   function bindField(field) {
     return {
@@ -114,10 +115,7 @@ export default function AppealForm({
       disabled: isSubmitting,
 
       onChange: (event) => {
-        updateField(
-          field,
-          event.target.value
-        )
+        updateField(field, event.target.value)
       },
 
       onBlur: () => {
@@ -138,6 +136,18 @@ export default function AppealForm({
     }
 
     if (!validateDraft()) {
+      const firstInvalidField =
+        Object.keys(errors)[0]
+
+      if (firstInvalidField) {
+        const control =
+          event.currentTarget.elements.namedItem(
+            firstInvalidField
+          )
+
+        control?.focus()
+      }
+
       return
     }
 
@@ -259,18 +269,14 @@ export default function AppealForm({
           label="Requested outcome"
           name="requestedOutcome"
           required
-          error={getFieldError(
-            'requestedOutcome'
-          )}
+          error={getFieldError('requestedOutcome')}
           hint="Describe the expected resolution using 10–500 characters."
         >
           {(attributes) => (
             <>
               <textarea
                 {...attributes}
-                {...bindField(
-                  'requestedOutcome'
-                )}
+                {...bindField('requestedOutcome')}
                 rows={3}
                 maxLength={500}
                 placeholder="Describe the expected resolution..."
@@ -370,6 +376,16 @@ export default function AppealForm({
           </p>
         )}
 
+        {isSubmitting && (
+          <p
+            className="field-hint"
+            role="status"
+          >
+            Sending your appeal to the server.
+            Please wait.
+          </p>
+        )}
+
         {isSubmitted && receipt && (
           <div
             className="form-feedback form-feedback--valid"
@@ -379,7 +395,7 @@ export default function AppealForm({
               Appeal received successfully.
             </strong>
 
-            <p>
+            <p className="receipt-id">
               Appeal ID: {receipt.appealID}
             </p>
 
@@ -390,10 +406,14 @@ export default function AppealForm({
         )}
 
         {!canSubmit && (
-          <p className="field-hint">
-            Submission is unavailable until
-            the appeal window and server clock
-            are confirmed.
+          <p
+            id={submissionHintID}
+            className="field-hint"
+          >
+            Submission is unavailable.
+            The appeal window may have expired
+            or the server clock may not be synchronized.
+            Check the SLA countdown above.
           </p>
         )}
 
@@ -401,19 +421,16 @@ export default function AppealForm({
           <button
             type="submit"
             className="button"
+            aria-describedby={
+              !canSubmit
+                ? submissionHintID
+                : undefined
+            }
             disabled={
               isSubmitting ||
               isSubmitted ||
               !canSubmit
             }
-            style={{
-              opacity:
-                isSubmitting ||
-                isSubmitted ||
-                !canSubmit
-                  ? 0.5
-                  : 1,
-            }}
           >
             {isSubmitting
               ? 'Submitting...'
