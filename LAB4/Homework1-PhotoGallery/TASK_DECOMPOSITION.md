@@ -20,7 +20,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | T04 | Native Dialog Lightbox | DONE |
 | T05 | Accessibility and Responsive UI | DONE |
 | T06 | Performance and Regression | DONE |
-| T07 | Documentation and Defense | TODO |
+| T07 | Documentation and Defense | done |
 
 ## Application Contracts
 
@@ -231,7 +231,7 @@ All images are demonstration assets, not real evidence.
 
 ## T07 — Documentation and Defense
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Complete project documentation and prepare for the oral defense.
 
