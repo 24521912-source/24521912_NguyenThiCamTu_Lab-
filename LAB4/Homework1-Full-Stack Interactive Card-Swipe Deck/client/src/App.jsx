@@ -1,122 +1,186 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+import SwipeDeck from './components/SwipeDeck.jsx';
+import demoProfiles from './data/profiles.js';
+
+import {
+  SWIPE_ACTIONS,
+  appendSwipe,
+  calculateScore,
+  getRemainingProfiles,
+} from './state/SwipeState.jsx';
+
+import './App.css';
+
+const actionLabels = {
+  [SWIPE_ACTIONS.PASS]: 'Pass',
+  [SWIPE_ACTIONS.LIKE]: 'Like',
+  [SWIPE_ACTIONS.SUPER_LIKE]: 'Super Like',
+};
+
+function App({ profiles = demoProfiles }) {
+  const [history, setHistory] = useState([]);
+
+  const remainingProfiles = getRemainingProfiles(
+    profiles,
+    history,
+  );
+
+  const currentProfile = remainingProfiles[0] ?? null;
+  const score = calculateScore(history);
+
+  const scoreClass =
+    score > 0
+      ? 'positive-score'
+      : score < 0
+        ? 'negative-score'
+        : '';
+
+  function handleSwipe(action) {
+    if (!currentProfile) {
+      return;
+    }
+
+    const entry = {
+      id: crypto.randomUUID(),
+      profileId: currentProfile.id,
+      action,
+      createdAt: new Date().toISOString(),
+    };
+
+    setHistory((previousHistory) =>
+      appendSwipe(profiles, previousHistory, entry),
+    );
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <main className="app-shell">
+      <div className="app-container">
+        <header className="app-header">
+          <div className="brand">
+            <span className="brand-icon" aria-hidden="true">
+              ♥
+            </span>
+
+            <div>
+              <h1>Almost Love</h1>
+              <p>Hen Ho Nhung Khong Yeu</p>
+            </div>
+          </div>
+
+          <span className="app-tag">SWIPE DECK</span>
+        </header>
+
+        <section
+          className="stats-grid"
+          aria-label="Deck statistics"
+          aria-live="polite"
         >
-          Count is {count}
-        </button>
-      </section>
+          <div className="stat-card">
+            <span>Score</span>
 
-      <div className="ticks"></div>
+            <strong
+              className={scoreClass}
+              data-testid="score-value"
+            >
+              {score > 0 ? `+${score}` : score}
+            </strong>
+          </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <div className="stat-card">
+            <span>Remaining</span>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+            <strong data-testid="remaining-value">
+              {remainingProfiles.length}
+            </strong>
+          </div>
+
+          <div className="stat-card">
+            <span>Swiped</span>
+
+            <strong data-testid="swiped-value">
+              {history.length}
+            </strong>
+          </div>
+        </section>
+
+        <SwipeDeck
+          profile={currentProfile}
+          remainingCount={remainingProfiles.length}
+          totalProfiles={profiles.length}
+          onSwipe={handleSwipe}
+        />
+
+        <section
+          className="history-section"
+          aria-labelledby="history-title"
+        >
+          <div className="history-header">
+            <h2 id="history-title">Swipe history</h2>
+
+            <span>
+              {history.length}{' '}
+              {history.length === 1 ? 'action' : 'actions'}
+            </span>
+          </div>
+
+          {history.length === 0 ? (
+            <p className="empty-history">
+              Your swipe history is empty.
+            </p>
+          ) : (
+            <ul className="history-list">
+              {[...history].reverse().map((entry) => {
+                const profile = profiles.find(
+                  (item) => item.id === entry.profileId,
+                );
+
+                const isLike =
+                  entry.action === SWIPE_ACTIONS.LIKE;
+
+                return (
+                  <li key={entry.id} className="history-item">
+                    <div className="history-profile">
+                      <span
+                        className="history-avatar"
+                        aria-hidden="true"
+                      >
+                        {profile?.name.charAt(0) || '?'}
+                      </span>
+
+                      <div>
+                        <strong>
+                          {profile?.name || 'Unknown profile'}
+                        </strong>
+
+                        <span>
+                          {actionLabels[entry.action]}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span
+                      className={
+                        isLike
+                          ? 'positive-score'
+                          : 'negative-score'
+                      }
+                    >
+                      {isLike ? '+10' : '-5'}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </section>
+
+        <footer className="app-footer">
+          UIT Web Application Development · Lab 4
+        </footer>
+      </div>
+    </main>
+  );
 }
 
-export default App
+export default App;

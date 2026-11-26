@@ -118,30 +118,41 @@ Run the following commands from the project root.
 ### Database
 
     docker compose ps
-
 ## Project Status
 
 - T01: Project setup and architecture completed.
 - T02: Backend persistence API completed.
+- T03: React card deck and derived state completed.
 
-The backend connects to MongoDB using Mongoose 8.
-Profile retrieval and swipe creation are available.
+The frontend displays fictional demo profiles and supports
+button-based swipe actions.
 
-The next task is the React card deck and derived state.
+The remaining queue, score, and swipe count are derived
+from swipe history.
 
-## Database Seeding
+Keyboard controls, pointer gestures, and LIFO undo will
+be implemented in T04.
 
-Run the following command from the project root:
+Frontend API integration and reload persistence will
+be implemented in T05.
 
-    npm --prefix server run seed
+## Swipe Scoring
 
-The seed script creates fictional demo profiles without
-duplicating existing profiles.
+| Action | Score |
+| --- | --- |
+| PASS | -5 |
+| LIKE | +10 |
+| SUPER_LIKE | -5 |
 
-## Available API Endpoints
+The score is derived directly from swipe history.
+It is not stored as independent React state.
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| GET | /api/health | Check server availability |
-| GET | /api/profiles | Retrieve profiles |
-| POST | /api/swipe | Create a swipe action |
+## Frontend State Management
+
+Swipe history acts as the single source of truth.
+
+Remaining profiles and score are calculated using pure
+functions. State updates preserve immutability.
+
+The current frontend uses local fictional demo data.
+Database synchronization is planned for T05.

@@ -21,7 +21,7 @@ persistent data using Express and Mongoose 8.
 | --- | --- | --- |
 | T01 | Project Setup and Architecture | DONE |
 | T02 | Backend Persistence API | DONE |
-| T03 | React Deck and Derived State | TODO |
+| T03 | React Deck and Derived State | DONE |
 | T04 | Swipe Controls and LIFO Undo | TODO |
 | T05 | Full-Stack Integration | TODO |
 | T06 | Accessibility and Reliability | TODO |
