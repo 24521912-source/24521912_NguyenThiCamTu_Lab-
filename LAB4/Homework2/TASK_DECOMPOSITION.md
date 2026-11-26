@@ -15,7 +15,7 @@ All case records and evaluation values are fictional demonstration data. They do
 | ID | Task | Status |
 |---|---|---|
 | T01 | Repository Setup and Architecture Contracts | DONE |
-| T02 | Dynamic Dossier Routing and Derived Matrix | TODO |
+| T02 | Dynamic Dossier Routing and Derived Matrix | DONE |
 | T03 | Appeal Form Context and Validation | TODO |
 | T04 | Zero-Drift SLA Countdown Hook | TODO |
 | T05 | Full-Stack API and Persistence | TODO |
@@ -227,7 +227,7 @@ Runtime storage files must not be committed to Git.
 
 ### T02 — Dynamic Dossier Routing and Derived Matrix
 
-**Status:** TODO
+**Status:** DONE
 
 **Prerequisite:** T01.
 
