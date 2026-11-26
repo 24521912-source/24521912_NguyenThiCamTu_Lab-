@@ -117,10 +117,10 @@ if (-not (Test-Path ".env")) {
 The default configuration is:
 
 ```dotenv
-PORT=3001
+PORT=3002
 HOST=127.0.0.1
 CLIENT_ORIGIN=http://localhost:5173
-VITE_API_BASE_URL=http://localhost:3001/api
+VITE_API_BASE_URL=http://localhost:3002/api
 ```
 
 The local `.env` file should not be committed to Git.
@@ -135,7 +135,7 @@ Open two terminal windows in the Homework2 directory.
 npm run server
 ```
 
-The backend listens on port 3001 by default.
+The backend listens on port 3002 by default.
 
 ### Terminal 2 — Frontend
 
@@ -382,22 +382,22 @@ Stop the frontend development server before starting the preview server.
 
 | Verification | Actual Result |
 |---|---|
-| Frontend tests | [Enter actual result] |
-| Backend tests | [Enter actual result] |
-| ESLint | [Enter actual result] |
-| Production build | [Enter actual result] |
-| Persistence after restart | [Enter actual result] |
-| Keyboard navigation | [Enter actual result] |
-| Responsive layout | [Enter actual result] |
+| Frontend tests | PASS — 11 test files, 124/124 tests (`npm --prefix client test`, 2026-11-26) |
+| Backend tests | PASS — 1 test file, 20/20 tests (`npm --prefix server test`, 2026-11-26) |
+| ESLint | PASS — 0 errors, 0 warnings (`npm --prefix client run lint`) |
+| Production build | PASS — 46 modules, JS 283.80 kB (gzip 89.45 kB), CSS 13.92 kB (`npm --prefix client run build`) |
+| Persistence after restart | Pending manual verification |
+| Keyboard navigation | Pending manual verification |
+| Responsive layout | Pending manual verification |
 
 ### Lighthouse Results
 
 | Metric | Desktop | Mobile |
 |---|---|---|
-| Performance | [Actual score] | [Actual score or not measured] |
-| Accessibility | [Actual score] | [Actual score or not measured] |
-| Best Practices | [Actual score] | [Actual score or not measured] |
-| SEO | [Actual score] | [Actual score or not measured] |
+| Performance | Not yet measured | Not yet measured |
+| Accessibility | Not yet measured | Not yet measured |
+| Best Practices | Not yet measured | Not yet measured |
+| SEO | Not yet measured | Not yet measured |
 
 Lighthouse results are recorded from actual measurements. Automated accessibility scores do not establish full WCAG compliance.
 
@@ -432,12 +432,12 @@ Stop the previous server before starting the frontend.
 
 ### Backend Connection Failure
 
-Make sure the Express backend is running on port 3001.
+Make sure the Express backend is running on port 3002.
 
 The health endpoint can be used to verify connectivity:
 
 ```powershell
-Invoke-RestMethod "http://127.0.0.1:3001/api/health"
+Invoke-RestMethod "http://127.0.0.1:3002/api/health"
 ```
 
 ### Vitest Worker Memory Failure

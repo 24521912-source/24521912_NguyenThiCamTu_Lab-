@@ -1,6 +1,6 @@
 const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ||
-  'http://localhost:3001/api'
+  'http://localhost:3002/api'
 ).replace(/\/$/, '')
 
 export class ApiError extends Error {

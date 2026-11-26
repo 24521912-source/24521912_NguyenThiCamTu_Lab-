@@ -32,7 +32,7 @@ Error messages:
    - Status: Partially effective.
 
 2. Changed the worker pool from forks to threads.
-   - Result: [Enter the actual test results.]
+   - Result: 124/124 client tests passed with 0 unhandled errors (re-verified 2026-11-26 with the current threads configuration).
    - Status: Resolved.
 
 ### Applied Fix
@@ -46,9 +46,9 @@ Updated vite.config.js:
 
 ### Verification
 
-- Regression tests: [Actual results]
-- ESLint: [Actual results]
-- Production build: [Actual results]
+- Regression tests: client 11 files, 124/124 passed; server 1 file, 20/20 passed (re-run 2026-11-26 with the single-worker thread pool, no memory allocation failure)
+- ESLint: 0 errors, 0 warnings
+- Production build: succeeded (46 modules, JS 283.80 kB, gzip 89.45 kB)
 
 ### Lesson Learned
 
@@ -63,4 +63,4 @@ in future projects.]
 ### Evidence
 
 - Terminal output: [Local evidence reference, if available]
-- Git commit: [Actual commit reference, if available]
+- Git commit: `65999f4` feat(hw2): implement appeal form context and validation (introduces `pool: 'threads'` in `client/vite.config.js`)

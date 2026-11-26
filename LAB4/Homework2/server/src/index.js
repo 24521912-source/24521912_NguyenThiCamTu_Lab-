@@ -14,7 +14,7 @@ dotenv.config({
 })
 
 const port = Number(
-  process.env.PORT || 3001
+  process.env.PORT || 3002
 )
 
 const host =
