@@ -119,10 +119,29 @@ Run the following commands from the project root.
 
     docker compose ps
 
-
 ## Project Status
 
-The initial project structure and development environment
-are ready.
+- T01: Project setup and architecture completed.
+- T02: Backend persistence API completed.
 
-Backend persistence is the next implementation task.
+The backend connects to MongoDB using Mongoose 8.
+Profile retrieval and swipe creation are available.
+
+The next task is the React card deck and derived state.
+
+## Database Seeding
+
+Run the following command from the project root:
+
+    npm --prefix server run seed
+
+The seed script creates fictional demo profiles without
+duplicating existing profiles.
+
+## Available API Endpoints
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | /api/health | Check server availability |
+| GET | /api/profiles | Retrieve profiles |
+| POST | /api/swipe | Create a swipe action |
