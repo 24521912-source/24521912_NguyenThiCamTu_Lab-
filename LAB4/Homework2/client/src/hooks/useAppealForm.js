@@ -1,5 +1,9 @@
 import { useContext } from 'react'
-import { AppealFormContext } from '../context/AppealFormContext'
+
+import {
+  AppealFormContext,
+} from '../context/AppealFormContext'
+
 import {
   createInitialValues,
   validateAppeal,
@@ -10,10 +14,14 @@ const EMPTY_DRAFT = {
   touched: {},
   validationAttempted: false,
   validated: false,
+  submissionStatus: 'idle',
+  submissionError: null,
+  receipt: null,
 }
 
 export function useAppealForm(playerID) {
-  const context = useContext(AppealFormContext)
+  const context =
+    useContext(AppealFormContext)
 
   if (!context) {
     throw new Error(
@@ -32,7 +40,11 @@ export function useAppealForm(playerID) {
     Object.keys(errors).length === 0
 
   function updateField(field, value) {
-    context.updateField(playerID, field, value)
+    context.updateField(
+      playerID,
+      field,
+      value
+    )
   }
 
   function touchField(field) {
@@ -42,7 +54,8 @@ export function useAppealForm(playerID) {
   function getFieldError(field) {
     const categoryRequiresEvidence =
       field === 'evidenceUrl' &&
-      values.appealCategory === 'evidence_review' &&
+      values.appealCategory ===
+        'evidence_review' &&
       draft.touched.appealCategory
 
     const shouldShowError =
@@ -56,7 +69,10 @@ export function useAppealForm(playerID) {
   }
 
   function validateDraft() {
-    context.recordValidation(playerID, isValid)
+    context.recordValidation(
+      playerID,
+      isValid
+    )
 
     return isValid
   }
@@ -65,16 +81,38 @@ export function useAppealForm(playerID) {
     context.resetDraft(playerID)
   }
 
+  function submitAppeal(sendAppeal) {
+    return context.submitAppeal(
+      playerID,
+      values,
+      sendAppeal
+    )
+  }
+
   return {
     values,
     errors,
     isValid,
-    validated: draft.validated && isValid,
-    validationAttempted: draft.validationAttempted,
+
+    validated:
+      draft.validated && isValid,
+
+    validationAttempted:
+      draft.validationAttempted,
+
+    submissionStatus:
+      draft.submissionStatus,
+
+    submissionError:
+      draft.submissionError,
+
+    receipt: draft.receipt,
+
     updateField,
     touchField,
     getFieldError,
     validateDraft,
     resetDraft,
+    submitAppeal,
   }
 }

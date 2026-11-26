@@ -1,73 +1,58 @@
-import { useMemo } from 'react'
+import {
+  useMemo,
+  useState,
+} from 'react'
+
 import {
   Link,
   useParams,
 } from 'react-router-dom'
 
 import {
-  getDossierByPlayerID,
-} from '../data/dossiers'
-
-import {
-  getDemoDeadline,
-  getDemoServerTime,
-} from '../data/demoClock'
-
-import {
-  computeMatrix,
-} from '../utils/computeMatrix'
+  useDossier,
+} from '../hooks/useDossier'
 
 import {
   useAppealSlaTimer,
 } from '../hooks/useAppealSlaTimer'
+
+import {
+  computeMatrix,
+} from '../utils/computeMatrix'
 
 import DisproportionalityMatrix from '../components/DisproportionalityMatrix'
 import AppealForm from '../components/AppealForm'
 import SlaCountdown from '../components/SlaCountdown'
 import NotFound from './NotFound'
 
-export default function DossierView() {
-  const { playerID } = useParams()
-
-  const dossierData =
-    getDossierByPlayerID(playerID)
-
+function DossierContent({
+  dossierData,
+  api,
+}) {
   const matrix = useMemo(
     () => computeMatrix(dossierData),
     [dossierData]
   )
 
   const deadlineMs =
-    getDemoDeadline(playerID)
+    dossierData.deadlineMs
 
   const timer = useAppealSlaTimer({
     deadlineMs,
-    getServerTime: getDemoServerTime,
+    getServerTime: api.getClock,
   })
 
-  if (!dossierData) {
-    return (
-      <NotFound
-        title="Dossier not found"
-        message="The requested player dossier is unavailable."
-      />
-    )
-  }
-
-  const canAccessAppeal =
+  const canSubmit =
     !timer.isExpired &&
-    !timer.isInvalid
+    !timer.isInvalid &&
+    timer.syncStatus === 'synchronized'
 
   return (
     <>
       <div className="breadcrumb">
         <Link to="/">Overview</Link>
-
         <span aria-hidden="true">/</span>
-
-        <span>
-          {dossierData.playerName}
-        </span>
+        <span>{dossierData.playerName}</span>
       </div>
 
       <section className="dossier-header">
@@ -140,25 +125,95 @@ export default function DossierView() {
       <SlaCountdown
         timer={timer}
         deadlineMs={deadlineMs}
+        demoMode={false}
       />
 
-      {canAccessAppeal ? (
-        <AppealForm
-          playerID={dossierData.playerID}
-          playerName={dossierData.playerName}
-          caseID={dossierData.caseID}
-        />
-      ) : (
-        <section className="panel empty-state">
-          <h2>Appeal unavailable</h2>
-
-          <p className="muted">
-            Appeals cannot be validated
-            outside an available appeal
-            window.
-          </p>
-        </section>
-      )}
+      <AppealForm
+        playerID={dossierData.playerID}
+        playerName={dossierData.playerName}
+        caseID={dossierData.caseID}
+        canSubmit={canSubmit}
+        sendAppeal={api.submitAppeal}
+      />
     </>
+  )
+}
+
+function DossierLoader({
+  playerID,
+  api,
+  onRetry,
+}) {
+  const result = useDossier(
+    playerID,
+    api
+  )
+
+  if (result.status === 'loading') {
+    return (
+      <section className="panel empty-state">
+        <h1>Loading dossier</h1>
+
+        <p className="muted" role="status">
+          Connecting to the tribunal server...
+        </p>
+      </section>
+    )
+  }
+
+  if (result.status === 'not_found') {
+    return (
+      <NotFound
+        title="Dossier not found"
+        message="The requested player dossier is unavailable."
+      />
+    )
+  }
+
+  if (result.status === 'error') {
+    return (
+      <section className="panel empty-state">
+        <h1>Unable to load dossier</h1>
+
+        <p className="muted" role="alert">
+          {result.error}
+        </p>
+
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={onRetry}
+        >
+          Retry
+        </button>
+      </section>
+    )
+  }
+
+  return (
+    <DossierContent
+      dossierData={result.dossier}
+      api={api}
+    />
+  )
+}
+
+export default function DossierView({ api }) {
+  const { playerID } = useParams()
+
+  const [attempt, setAttempt] =
+    useState(0)
+
+  return (
+    <DossierLoader
+      key={`${playerID}-${attempt}`}
+      playerID={playerID}
+      api={api}
+      onRetry={() => {
+        setAttempt(
+          (previous) => previous + 1
+        )
+      }}
+    />
   )
 }

@@ -1,13 +1,33 @@
-import { describe, expect, it } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest'
+
+import {
+  render,
+  screen,
+  within,
+} from '@testing-library/react'
+
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+
+import {
+  MemoryRouter,
+} from 'react-router-dom'
+
 import FairPlayAppealPortal from '../FairPlayAppealPortal'
+
+import {
+  createTestApi,
+} from './portalTestApi'
 
 function renderPortal(path = '/') {
   return render(
     <MemoryRouter initialEntries={[path]}>
-      <FairPlayAppealPortal />
+      <FairPlayAppealPortal
+        api={createTestApi()}
+      />
     </MemoryRouter>
   )
 }
@@ -41,11 +61,11 @@ describe('Dossier routing', () => {
     ['tanvuu', 'TanVuu'],
   ])(
     'renders the %s dossier through a direct route',
-    (playerID, playerName) => {
+    async (playerID, playerName) => {
       renderPortal(`/dossier/${playerID}`)
 
       expect(
-        screen.getByRole('heading', {
+        await screen.findByRole('heading', {
           name: playerName,
           level: 1,
         })
@@ -64,6 +84,11 @@ describe('Dossier routing', () => {
 
     renderPortal('/dossier/himass')
 
+    await screen.findByRole('heading', {
+      name: 'Himass',
+      level: 1,
+    })
+
     const navigation = screen.getByRole(
       'navigation',
       { name: 'Main navigation' }
@@ -76,7 +101,7 @@ describe('Dossier routing', () => {
     )
 
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         name: 'TanVuu',
         level: 1,
       })
@@ -90,8 +115,13 @@ describe('Dossier routing', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('marks the current dossier navigation link', () => {
+  it('marks the current dossier navigation link', async () => {
     renderPortal('/dossier/himass')
+
+    await screen.findByRole('heading', {
+      name: 'Himass',
+      level: 1,
+    })
 
     expect(
       screen.getByRole('link', {
@@ -101,11 +131,11 @@ describe('Dossier routing', () => {
     ).toHaveAttribute('aria-current', 'page')
   })
 
-  it('shows a boundary for unknown player identifiers', () => {
+  it('shows a boundary for unknown player identifiers', async () => {
     renderPortal('/dossier/unknown-player')
 
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         name: 'Dossier not found',
       })
     ).toBeInTheDocument()
@@ -127,7 +157,7 @@ describe('Dossier routing', () => {
     renderPortal('/dossier/unknown-player')
 
     await user.click(
-      screen.getByRole('link', {
+      await screen.findByRole('link', {
         name: 'Back to overview',
       })
     )
@@ -140,11 +170,13 @@ describe('Dossier routing', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays fictional data notices', () => {
+  it('displays fictional data notices', async () => {
     renderPortal('/dossier/tanvuu')
 
     expect(
-      screen.getByText('Fictional case data')
+      await screen.findByText(
+        'Fictional case data'
+      )
     ).toBeInTheDocument()
   })
 
@@ -153,18 +185,19 @@ describe('Dossier routing', () => {
 
     renderPortal('/dossier/himass')
 
-    const table = screen.getByRole('table', {
-      name: 'Review criteria and calculated deviations',
-    })
-
-    const procedureRow = within(table).getByRole(
-      'row',
-      { name: /Procedural Review/i }
+    const table = await screen.findByRole(
+      'table',
+      {
+        name:
+          'Review criteria and calculated deviations',
+      }
     )
 
     expect(
-      within(procedureRow).getByText('-10.0')
-    ).toBeInTheDocument()
+      within(table).getByRole('row', {
+        name: /Procedural Review/i,
+      })
+    ).toHaveTextContent('-10.0')
 
     await user.click(
       screen.getByRole('link', {
@@ -173,17 +206,26 @@ describe('Dossier routing', () => {
       })
     )
 
-    const updatedTable = screen.getByRole('table', {
-      name: 'Review criteria and calculated deviations',
+    await screen.findByRole('heading', {
+      name: 'TanVuu',
+      level: 1,
     })
 
-    const updatedRow = within(updatedTable).getByRole(
-      'row',
-      { name: /Procedural Review/i }
+    const updatedTable = screen.getByRole(
+      'table',
+      {
+        name:
+          'Review criteria and calculated deviations',
+      }
     )
 
     expect(
-      within(updatedRow).getByText('-15.0')
-    ).toBeInTheDocument()
+      within(updatedTable).getByRole(
+        'row',
+        {
+          name: /Procedural Review/i,
+        }
+      )
+    ).toHaveTextContent('-15.0')
   })
 })

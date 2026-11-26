@@ -1,6 +1,13 @@
 import { useId } from 'react'
-import { useAppealForm } from '../hooks/useAppealForm'
-import { APPEAL_CATEGORIES } from '../utils/appealValidation'
+
+import {
+  useAppealForm,
+} from '../hooks/useAppealForm'
+
+import {
+  APPEAL_CATEGORIES,
+} from '../utils/appealValidation'
+
 import './AppealForm.css'
 
 function FormField({
@@ -19,9 +26,7 @@ function FormField({
   const describedBy = [
     hint ? hintID : null,
     error ? errorID : null,
-  ]
-    .filter(Boolean)
-    .join(' ')
+  ].filter(Boolean).join(' ')
 
   return (
     <div className="appeal-field">
@@ -48,19 +53,13 @@ function FormField({
       })}
 
       {hint && (
-        <p
-          id={hintID}
-          className="field-hint"
-        >
+        <p id={hintID} className="field-hint">
           {hint}
         </p>
       )}
 
       {error && (
-        <p
-          id={errorID}
-          className="field-error"
-        >
+        <p id={errorID} className="field-error">
           {error}
         </p>
       )}
@@ -72,9 +71,10 @@ export default function AppealForm({
   playerID,
   playerName,
   caseID,
+  sendAppeal,
+  canSubmit = true,
 }) {
   const headingID = useId()
-
   const acknowledgmentID = useId()
 
   const acknowledgmentErrorID =
@@ -83,27 +83,43 @@ export default function AppealForm({
   const {
     values,
     isValid,
-    validated,
     validationAttempted,
+    submissionStatus,
+    submissionError,
+    receipt,
     updateField,
     touchField,
     getFieldError,
     validateDraft,
     resetDraft,
+    submitAppeal,
   } = useAppealForm(playerID)
+
+  const isSubmitting =
+    submissionStatus === 'submitting'
+
+  const isSubmitted =
+    submissionStatus === 'success'
 
   const acknowledgmentError =
     getFieldError('acknowledged')
 
   const evidenceRequired =
-    values.appealCategory === 'evidence_review'
+    values.appealCategory ===
+      'evidence_review'
 
   function bindField(field) {
     return {
       value: values[field],
+      disabled: isSubmitting,
+
       onChange: (event) => {
-        updateField(field, event.target.value)
+        updateField(
+          field,
+          event.target.value
+        )
       },
+
       onBlur: () => {
         touchField(field)
       },
@@ -113,11 +129,19 @@ export default function AppealForm({
   function handleSubmit(event) {
     event.preventDefault()
 
+    if (
+      isSubmitting ||
+      isSubmitted ||
+      !canSubmit
+    ) {
+      return
+    }
+
     if (!validateDraft()) {
       return
     }
 
-    // Server submission will be implemented in T05.
+    void submitAppeal(sendAppeal)
   }
 
   return (
@@ -142,7 +166,7 @@ export default function AppealForm({
         </div>
 
         <span className="status-badge">
-          Draft
+          {isSubmitted ? 'Received' : 'Draft'}
         </span>
       </div>
 
@@ -155,6 +179,7 @@ export default function AppealForm({
       <form
         className="appeal-form"
         aria-label={`${playerName} appeal form`}
+        aria-busy={isSubmitting}
         onSubmit={handleSubmit}
         noValidate
       >
@@ -243,7 +268,9 @@ export default function AppealForm({
             <>
               <textarea
                 {...attributes}
-                {...bindField('requestedOutcome')}
+                {...bindField(
+                  'requestedOutcome'
+                )}
                 rows={3}
                 maxLength={500}
                 placeholder="Describe the expected resolution..."
@@ -285,6 +312,7 @@ export default function AppealForm({
               name="acknowledged"
               type="checkbox"
               checked={values.acknowledged}
+              disabled={isSubmitting}
               required
               aria-invalid={Boolean(
                 acknowledgmentError
@@ -332,13 +360,40 @@ export default function AppealForm({
           </p>
         )}
 
-        {validated && (
+        {submissionError && (
           <p
+            className="form-feedback form-feedback--error"
+            role="alert"
+          >
+            {submissionError} Your draft has
+            been retained.
+          </p>
+        )}
+
+        {isSubmitted && receipt && (
+          <div
             className="form-feedback form-feedback--valid"
             role="status"
           >
-            All fields are valid. Server
-            submission is not available yet.
+            <strong>
+              Appeal received successfully.
+            </strong>
+
+            <p>
+              Appeal ID: {receipt.appealID}
+            </p>
+
+            <p>
+              Status: {receipt.status}
+            </p>
+          </div>
+        )}
+
+        {!canSubmit && (
+          <p className="field-hint">
+            Submission is unavailable until
+            the appeal window and server clock
+            are confirmed.
           </p>
         )}
 
@@ -346,13 +401,31 @@ export default function AppealForm({
           <button
             type="submit"
             className="button"
+            disabled={
+              isSubmitting ||
+              isSubmitted ||
+              !canSubmit
+            }
+            style={{
+              opacity:
+                isSubmitting ||
+                isSubmitted ||
+                !canSubmit
+                  ? 0.5
+                  : 1,
+            }}
           >
-            Validate Appeal
+            {isSubmitting
+              ? 'Submitting...'
+              : isSubmitted
+                ? 'Appeal Received'
+                : 'Submit Appeal'}
           </button>
 
           <button
             type="button"
             className="secondary-button"
+            disabled={isSubmitting}
             onClick={resetDraft}
           >
             Reset draft
@@ -360,9 +433,9 @@ export default function AppealForm({
         </div>
 
         <p className="appeal-disclaimer">
-          Local draft validation only. No
-          appeal is sent to a server in this
-          development stage.
+          Academic demonstration only.
+          Do not enter real personal
+          information or confidential evidence.
         </p>
       </form>
     </section>

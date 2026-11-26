@@ -5,6 +5,11 @@
   "description": "Academic full-stack esports appeal portal",
   "scripts": {
     "dev": "npm --prefix client run dev",
+    "server": "npm --prefix server run dev",
+    "start:server": "npm --prefix server run start",
+    "test": "npm run test:client && npm run test:server",
+    "test:client": "npm --prefix client run test",
+    "test:server": "npm --prefix server run test",
     "lint": "npm --prefix client run lint",
     "build": "npm --prefix client run build"
   }

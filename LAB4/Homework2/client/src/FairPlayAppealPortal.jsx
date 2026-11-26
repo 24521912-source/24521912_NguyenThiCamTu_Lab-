@@ -1,11 +1,22 @@
-import { Route, Routes } from 'react-router-dom'
+import {
+  Route,
+  Routes,
+} from 'react-router-dom'
+
 import PortalLayout from './components/PortalLayout'
 import Overview from './pages/Overview'
 import DossierView from './pages/DossierView'
 import NotFound from './pages/NotFound'
+
 import AppealFormProvider from './context/AppealFormProvider'
 
-export default function FairPlayAppealPortal() {
+import {
+  tribunalApi,
+} from './services/tribunalApi'
+
+export default function FairPlayAppealPortal({
+  api = tribunalApi,
+}) {
   return (
     <AppealFormProvider>
       <Routes>
@@ -14,7 +25,7 @@ export default function FairPlayAppealPortal() {
 
           <Route
             path="dossier/:playerID"
-            element={<DossierView />}
+            element={<DossierView api={api} />}
           />
 
           <Route

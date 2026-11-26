@@ -18,7 +18,7 @@ All case records and evaluation values are fictional demonstration data. They do
 | T02 | Dynamic Dossier Routing and Derived Matrix | DONE |
 | T03 | Appeal Form Context and Validation | DONE |
 | T04 | Zero-Drift SLA Countdown Hook | DONE |
-| T05 | Full-Stack API and Persistence | TODO |
+| T05 | Full-Stack API and Persistence | DONE |
 | T06 | Accessibility and Regression Testing | TODO |
 | T07 | Documentation, Audit and Live Defense | TODO |
 
@@ -280,6 +280,7 @@ Runtime storage files must not be committed to Git.
 
 **Status:** DONE
 
+
 **Prerequisite:** T03.
 
 **Objective:** Implement useAppealSlaTimer using absolute timestamps and visibility resynchronization.
@@ -303,7 +304,7 @@ Runtime storage files must not be committed to Git.
 
 ### T05 — Full-Stack API and Persistence
 
-**Status:** TODO
+**Status:** DONE
 
 **Prerequisite:** T04.
 
@@ -377,7 +378,14 @@ Runtime storage files must not be committed to Git.
 - The student completes the AI failure audit independently.
 - All task statuses reflect completed work.
 - The student can explain routing, context, derived state, validation, timer synchronization and persistence.
-
+- HTTP 413: Request body exceeds the configured size limit.
+- Duplicate request IDs with identical payloads return
+  HTTP 409 with the existing appeal receipt.
+- Duplicate request IDs with different payloads return
+  HTTP 409 without a receipt.
+- Runtime storage is initialized once and preserved
+  across backend restarts.
+- JSON persistence supports a single backend process.
 **Verification:** Review documentation, run the final verification suite and inspect Git history.
 
 **Commit:** docs(hw2): finalize tribunal documentation and defense

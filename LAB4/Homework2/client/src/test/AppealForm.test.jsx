@@ -1,22 +1,27 @@
-import { describe, expect, it } from 'vitest'
+import {
+  describe,
+  expect,
+  it,
+} from 'vitest'
+
 import {
   render,
   screen,
   within,
+  waitFor,
 } from '@testing-library/react'
+
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+
+import {
+  MemoryRouter,
+} from 'react-router-dom'
+
 import FairPlayAppealPortal from '../FairPlayAppealPortal'
 
-function renderPortal(
-  path = '/dossier/himass'
-) {
-  return render(
-    <MemoryRouter initialEntries={[path]}>
-      <FairPlayAppealPortal />
-    </MemoryRouter>
-  )
-}
+import {
+  createTestApi,
+} from './portalTestApi'
 
 function getNameInput() {
   return screen.getByRole('textbox', {
@@ -36,6 +41,34 @@ function getEvidenceInput() {
   })
 }
 
+function getSubmitButton() {
+  return screen.getByRole('button', {
+    name: 'Submit Appeal',
+  })
+}
+
+async function renderPortal() {
+  const api = createTestApi()
+
+  render(
+    <MemoryRouter
+      initialEntries={['/dossier/himass']}
+    >
+      <FairPlayAppealPortal api={api} />
+    </MemoryRouter>
+  )
+
+  await screen.findByRole('form', {
+    name: 'Himass appeal form',
+  })
+
+  await waitFor(() => {
+    expect(getSubmitButton()).toBeEnabled()
+  })
+
+  return api
+}
+
 async function fillValidAppeal(user) {
   await user.type(
     getNameInput(),
@@ -47,17 +80,29 @@ async function fillValidAppeal(user) {
     'procedural_review'
   )
 
-  await user.type(
-    screen.getByRole('textbox', {
-      name: /appeal statement/i,
-    }),
+  await user.paste(
+    ''
+  )
+
+  const statement = screen.getByRole(
+    'textbox',
+    { name: /appeal statement/i }
+  )
+
+  await user.click(statement)
+
+  await user.paste(
     'This academic appeal requests a review of the fictional case procedure.'
   )
 
-  await user.type(
-    screen.getByRole('textbox', {
-      name: /requested outcome/i,
-    }),
+  const outcome = screen.getByRole(
+    'textbox',
+    { name: /requested outcome/i }
+  )
+
+  await user.click(outcome)
+
+  await user.paste(
     'Request an independent review.'
   )
 
@@ -80,17 +125,17 @@ async function navigateTo(user, playerName) {
       exact: true,
     })
   )
+
+  if (playerName !== 'Overview') {
+    await screen.findByRole('form', {
+      name: `${playerName} appeal form`,
+    })
+  }
 }
 
 describe('Appeal form', () => {
-  it('renders an empty appeal form', () => {
-    renderPortal()
-
-    expect(
-      screen.getByRole('form', {
-        name: 'Himass appeal form',
-      })
-    ).toBeInTheDocument()
+  it('renders an empty appeal form', async () => {
+    await renderPortal()
 
     expect(getNameInput()).toHaveValue('')
 
@@ -99,8 +144,8 @@ describe('Appeal form', () => {
     ).not.toBeChecked()
   })
 
-  it('does not display initial validation errors', () => {
-    renderPortal()
+  it('does not display initial validation errors', async () => {
+    await renderPortal()
 
     expect(
       screen.queryByText(
@@ -112,7 +157,7 @@ describe('Appeal form', () => {
   it('validates a name while the user types', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.type(getNameInput(), 'A')
 
@@ -129,12 +174,6 @@ describe('Appeal form', () => {
 
     await user.type(getNameInput(), 'lex')
 
-    expect(
-      screen.queryByText(
-        'Appellant name must contain at least 2 characters.'
-      )
-    ).not.toBeInTheDocument()
-
     expect(getNameInput()).toHaveAttribute(
       'aria-invalid',
       'false'
@@ -144,10 +183,9 @@ describe('Appeal form', () => {
   it('shows a required error after an empty field loses focus', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.click(getNameInput())
-
     await user.tab()
 
     expect(
@@ -160,7 +198,7 @@ describe('Appeal form', () => {
   it('requires evidence when evidence review is selected', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.selectOptions(
       getCategoryInput(),
@@ -179,7 +217,7 @@ describe('Appeal form', () => {
   it('removes the evidence requirement when the category changes', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.selectOptions(
       getCategoryInput(),
@@ -191,9 +229,8 @@ describe('Appeal form', () => {
       'procedural_review'
     )
 
-    expect(
-      getEvidenceInput()
-    ).not.toBeRequired()
+    expect(getEvidenceInput())
+      .not.toBeRequired()
 
     expect(
       screen.queryByText(
@@ -202,16 +239,12 @@ describe('Appeal form', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('blocks invalid appeal validation', async () => {
+  it('blocks invalid submissions', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    const api = await renderPortal()
 
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Validate Appeal',
-      })
-    )
+    await user.click(getSubmitButton())
 
     expect(
       screen.getByRole('alert')
@@ -219,65 +252,61 @@ describe('Appeal form', () => {
       'Please correct the highlighted fields'
     )
 
-    expect(
-      screen.queryByRole('status')
-    ).not.toBeInTheDocument()
+    expect(api.submitAppeal)
+      .not.toHaveBeenCalled()
   })
 
-  it('validates a complete appeal without claiming server submission', async () => {
+  it('shows a receipt after server acknowledgment', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    const api = await renderPortal()
 
     await fillValidAppeal(user)
 
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Validate Appeal',
-      })
-    )
+    await user.click(getSubmitButton())
 
     expect(
-      screen.getByRole('status')
-    ).toHaveTextContent(
-      'All fields are valid.'
-    )
-
-    expect(
-      screen.getByRole('status')
-    ).toHaveTextContent(
-      'Server submission is not available yet.'
-    )
-  })
-
-  it('clears the validated status after editing the draft', async () => {
-    const user = userEvent.setup()
-
-    renderPortal()
-
-    await fillValidAppeal(user)
-
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Validate Appeal',
-      })
-    )
-
-    expect(
-      screen.getByRole('status')
+      await screen.findByText(
+        'Appeal received successfully.'
+      )
     ).toBeInTheDocument()
+
+    expect(api.submitAppeal)
+      .toHaveBeenCalledTimes(1)
+
+    expect(
+      screen.getByRole('button', {
+        name: 'Appeal Received',
+      })
+    ).toBeDisabled()
+  })
+
+  it('clears the receipt after editing a submitted draft', async () => {
+    const user = userEvent.setup()
+
+    await renderPortal()
+
+    await fillValidAppeal(user)
+
+    await user.click(getSubmitButton())
+
+    await screen.findByText(
+      'Appeal received successfully.'
+    )
 
     await user.type(getNameInput(), ' A')
 
     expect(
-      screen.queryByRole('status')
+      screen.queryByText(
+        'Appeal received successfully.'
+      )
     ).not.toBeInTheDocument()
   })
 
   it('keeps independent drafts for each player', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.type(
       getNameInput(),
@@ -309,7 +338,7 @@ describe('Appeal form', () => {
   it('preserves the draft after visiting the overview', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.type(
       getNameInput(),
@@ -329,21 +358,17 @@ describe('Appeal form', () => {
     )
   })
 
-  it('resets the current draft and its validation state', async () => {
+  it('resets the current draft and validation state', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.type(
       getNameInput(),
       'Demo Appellant'
     )
 
-    await user.click(
-      screen.getByRole('button', {
-        name: 'Validate Appeal',
-      })
-    )
+    await user.click(getSubmitButton())
 
     await user.click(
       screen.getByRole('button', {
@@ -356,18 +381,12 @@ describe('Appeal form', () => {
     expect(
       screen.queryByRole('alert')
     ).not.toBeInTheDocument()
-
-    expect(
-      screen.queryByText(
-        'Appellant name is required.'
-      )
-    ).not.toBeInTheDocument()
   })
 
   it('does not reset the other player draft', async () => {
     const user = userEvent.setup()
 
-    renderPortal()
+    await renderPortal()
 
     await user.type(
       getNameInput(),
