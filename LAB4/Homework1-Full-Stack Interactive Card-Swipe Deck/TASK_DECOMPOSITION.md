@@ -25,7 +25,7 @@ persistent data using Express and Mongoose 8.
 | T04 | Swipe Controls and LIFO Undo | DONE |
 | T05 | Full-Stack Integration | DONE |
 | T06 | Accessibility and Reliability | DONE |
-| T07 | Documentation and Defense | TODO |
+| T07 | Documentation and Defense | DONE |
 
 ---
 

@@ -210,3 +210,18 @@ until the current database state is loaded again.
 
 The application uses a single local demo session and
 does not provide multi-client transaction guarantees.
+
+## Request Timeout and Recovery
+
+HTTP requests use a ten-second timeout.
+
+The frontend preserves the last confirmed history
+when a mutation fails or times out.
+
+Further mutations remain unavailable until the
+application reloads profiles and swipe history.
+
+A cancelled frontend request may still result in a
+server-side database operation.
+
+Automatic mutation retries are not performed.

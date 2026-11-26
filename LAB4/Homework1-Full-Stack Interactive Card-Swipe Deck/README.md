@@ -1,57 +1,113 @@
-
-# Full-Stack Interactive Card-Swipe Deck
+# Almost Love - Interactive Card-Swipe Deck
 
 UIT Web Application Development - Lab 4, Homework 1.2
 
 ## Overview
 
-An interactive profile card deck based on the
-Hen Ho Nhung Khong Yeu assignment.
+Almost Love is a full-stack interactive profile card deck
+inspired by the Hen Ho Nhung Khong Yeu assignment.
 
-The project focuses on event handling, state management,
-undo operations, and database persistence.
+The application demonstrates keyboard and pointer event
+handling, immutable state management, LIFO undo, derived
+scoring, and database persistence.
 
-## Planned Features
+All profiles are fictional and created for demonstration
+purposes.
 
-- Keyboard and pointer swipe controls
-- LIFO undo stack
+## Features
+
+- Interactive profile card deck
+- Keyboard-based swipe controls
+- Mouse and touch pointer gestures
+- Gesture direction and threshold detection
 - Asymmetric derived scoring
+- LIFO undo operations
 - Persistent swipe history
-- Responsive and accessible interface
-- Error handling and state recovery
+- State recovery after page reload
+- Duplicate swipe prevention
+- Request locking and timeout handling
+- Network error recovery
+- Responsive layouts
+- Accessible keyboard controls
+- Reduced motion support
 
 ## Technology Stack
 
-### Frontend
+| Layer | Technology |
+| --- | --- |
+| Frontend | React and Vite |
+| Backend | Node.js and Express |
+| ODM | Mongoose 8 |
+| Database | MongoDB 8 |
+| Frontend Testing | Vitest and React Testing Library |
+| Backend Testing | Node.js Test Runner |
+| Infrastructure | Docker Compose |
+| Code Quality | ESLint |
+| Version Control | Git |
 
-- React
-- Vite
-- Vitest
-- React Testing Library
+## Architecture
 
-### Backend
+The application follows a client-server architecture.
 
-- Node.js
-- Express
-- Mongoose 8
-- MongoDB
-- Node.js Test Runner
+    React Frontend
+          |
+          | HTTP / JSON
+          v
+    Express REST API
+          |
+          v
+    Mongoose Models
+          |
+          v
+    MongoDB Database
 
-### Development Tools
+The frontend manages user interactions and derives the
+visible deck state from confirmed swipe history.
 
-- Docker Compose
-- Git
-- Visual Studio Code
+The backend validates requests and manages persistent
+profiles and swipe actions.
 
 ## Project Structure
 
-    client/                  Frontend application
-    server/                  Backend application
-    compose.yaml             MongoDB container configuration
-    Project-rules.md         Development guidelines
-    TASK_DECOMPOSITION.md    Task planning and progress
-    API_CONTRACT.md          API and state contracts
-    AI_FAILURE_AUDIT.md      AI-assisted development audit
+    client/
+        public/
+        src/
+            api/
+            components/
+            data/
+            hooks/
+            state/
+            test/
+            App.jsx
+            App.css
+            Responsive.css
+            index.css
+            main.jsx
+        .env.example
+        package.json
+        vite.config.js
+
+    server/
+        src/
+            config/
+            data/
+            models/
+            routes/
+            app.js
+            index.js
+            seed.js
+        test/
+        .env.example
+        package.json
+
+    evidence/
+    compose.yaml
+    Project-rules.md
+    TASK_DECOMPOSITION.md
+    API_CONTRACT.md
+    AI_FAILURE_AUDIT.md
+    QUALITY_CHECKLIST.md
+    DEFENSE_GUIDE.md
 
 ## Getting Started
 
@@ -62,24 +118,58 @@ undo operations, and database persistence.
 - Git
 - Docker Desktop
 
-### 1. Start MongoDB
+Run all setup commands from the project root unless
+otherwise specified.
 
-From the project root, run:
+### 1. Install Dependencies
+
+    npm --prefix client ci
+    npm --prefix server ci
+
+### 2. Configure Environment Variables
+
+Create the environment files if they do not exist.
+
+    Copy-Item server/.env.example server/.env
+    Copy-Item client/.env.example client/.env
+
+The backend uses the following local configuration:
+
+    PORT=3001
+    CLIENT_ORIGIN=http://localhost:5174
+    MONGODB_URI=mongodb://127.0.0.1:27018/swipe_deck
+
+The frontend uses:
+
+    VITE_API_BASE_URL=http://localhost:3001/api
+
+Environment files are excluded from version control.
+
+### 3. Start MongoDB
+
+Make sure Docker Desktop is running.
 
     docker compose up -d
+    docker compose ps
 
-### 2. Start the Backend
+Verify the database connection:
 
-    cd server
-    npm install
+    docker compose exec mongodb mongosh --quiet --eval "db.adminCommand({ ping: 1 })"
 
-Create the environment file if it does not exist.
+MongoDB uses a named Docker volume for data persistence.
 
-    Copy-Item .env.example .env
+### 4. Seed Profiles
 
-Start the development server.
+    npm --prefix server run seed
 
-    npm run dev
+The seed script inserts fictional demo profiles without
+duplicating existing profile identifiers.
+
+### 5. Start the Backend
+
+Open a terminal and run:
+
+    npm --prefix server run dev
 
 Backend URL:
 
@@ -89,53 +179,48 @@ Health endpoint:
 
     http://localhost:3001/api/health
 
-### 3. Start the Frontend
+### 6. Start the Frontend
 
-Open a separate terminal from the project root.
+Open another terminal and run:
 
-    cd client
-    npm install
-    npm run dev
+    npm --prefix client run dev
 
 Frontend URL:
 
     http://localhost:5174
 
-## Testing
+## User Controls
 
-Run the following commands from the project root.
+### Keyboard Controls
 
-### Frontend
+| Key | Action |
+| --- | --- |
+| ArrowLeft | PASS |
+| ArrowRight | LIKE |
+| ArrowUp | SUPER_LIKE |
+| Backspace | Undo the latest swipe |
 
-    npm --prefix client run test
-    npm --prefix client run lint
-    npm --prefix client run build
+Repeated keyboard events and shortcuts inside editable
+elements are ignored.
 
-### Backend
+### Pointer Controls
 
-    npm --prefix server run test
+- Swipe left to pass a profile.
+- Swipe right to like a profile.
+- Swipe upward to perform a super like.
+- Movement must exceed 50 pixels.
+- The dominant axis determines the swipe direction.
+- Short, downward, cancelled, and equally diagonal
+  gestures are ignored.
 
-### Database
+### Button Controls
 
-    docker compose ps
+The same actions are available through accessible buttons.
 
-## Project Status
+All swipe input methods share the same state management
+and persistence logic.
 
-- T01: Project setup and architecture completed.
-- T02: Backend persistence API completed.
-- T03: React card deck and derived state completed.
-- T04: Keyboard, pointer controls, and LIFO undo completed.
-- T05: Full-stack integration and persistence completed.
-- T06: Accessibility and reliability improvements completed.
-
-The application supports responsive layouts, accessible
-controls, persistent swipe history, request timeout
-handling, and synchronization recovery.
-
-Final documentation and assignment defense preparation
-will be completed in T07.
-
-## Swipe Scoring
+## Scoring Rules
 
 | Action | Score |
 | --- | --- |
@@ -144,117 +229,222 @@ will be completed in T07.
 | SUPER_LIKE | -5 |
 
 The score is derived directly from swipe history.
-It is not stored as independent React state.
 
-## Frontend State Management
+LIKE contributes ten points, while other supported
+actions contribute negative five points.
 
-The application retrieves profiles and persisted swipe
-history from the backend by default.
+The application does not maintain a separate score state.
 
-Local profile data can be passed to the application
-for isolated component testing.
+## State Management
 
-## Keyboard Controls
+Swipe history is the single source of truth for the
+current deck state.
 
-| Key | Action |
-| --- | --- |
-| ArrowLeft | Pass |
-| ArrowRight | Like |
-| ArrowUp | Super Like |
-| Backspace | Undo last swipe |
+The remaining profile queue is calculated by excluding
+profiles that already exist in swipe history.
 
-Repeated keyboard events and editable input targets
-are ignored.
+The score is calculated using Array.reduce().
 
-## Pointer Controls
+State updates preserve immutability.
 
-- Drag right to Like.
-- Drag left to Pass.
-- Drag upward to Super Like.
-- Movement must exceed 50 pixels.
-- The dominant axis determines the gesture direction.
-- Short, downward, cancelled, and equally diagonal
-  gestures are ignored.
+## LIFO Undo
 
-## Undo Behavior
+Undo follows the Last In, First Out principle.
 
-Undo is persisted in MongoDB.
+The latest swipe action is removed first, restoring its
+profile to the remaining queue.
 
-The frontend removes the latest history entry only
-after receiving a successful server response.
-## Available API Endpoints
+In persistent mode, the backend deletes the action from
+MongoDB before the frontend updates its confirmed history.
+
+The remaining queue and score are then recalculated.
+
+## REST API
 
 | Method | Endpoint | Description |
 | --- | --- | --- |
 | GET | /api/health | Check server availability |
 | GET | /api/profiles | Retrieve profiles |
-| POST | /api/swipe | Create a swipe action |
+| POST | /api/swipe | Persist a swipe action |
 | GET | /api/swipe/history/:sessionId | Retrieve ordered history |
 | DELETE | /api/swipe/history/:sessionId/last | Undo the latest action |
-## Frontend Environment
 
-Create the frontend environment file if it does not
-already exist.
+Example swipe request:
 
-    Copy-Item client/.env.example client/.env
+    {
+      "sessionId": "local-demo-session",
+      "profileId": "profile-01",
+      "action": "LIKE"
+    }
 
-The default API base URL is:
+Example undo request:
 
-    http://localhost:3001/api
+    {
+      "expectedActionId": "stored-action-id"
+    }
 
-## Persistent Session
+Detailed request and response contracts are documented
+in API_CONTRACT.md.
 
-The application uses a fixed local demo session:
+## Database Design
+
+### Profiles
+
+Each profile contains a stable identifier, name, age,
+biography, and avatar reference.
+
+### Swipes
+
+Each swipe contains:
+
+- Database-generated action identifier
+- Session identifier
+- Profile identifier
+- Swipe action
+- Creation timestamp
+
+A unique compound index on sessionId and profileId
+prevents duplicate active swipes within a session.
+
+The history is ordered using createdAt and _id.
+
+## Persistence and Synchronization
+
+The application uses a fixed local demonstration session:
 
     local-demo-session
 
-Authentication and multi-user session management are
-outside the scope of this assignment.
+Profiles and swipe history are retrieved from the
+backend when the application starts.
 
-## Synchronization and Error Recovery
+The frontend waits for server confirmation before
+updating its history.
 
-Swipe and undo operations wait for server confirmation
-before updating the visible history.
+Mutation requests are serialized to prevent overlapping
+operations from the same frontend.
 
-Additional mutation requests are blocked while an
-operation is pending.
+After a page reload, the application reconstructs its
+remaining queue and score from stored history.
 
-If a request fails, the application preserves its last
-confirmed history and requires a reload of the deck
-before accepting more actions.
+## Error Handling
 
-## Database Persistence
+The application handles:
 
-MongoDB data is stored in a Docker named volume.
-
-Stopping or restarting the container preserves the data.
-
-Do not remove the database volume unless a complete
-database reset is intended.
-## Accessibility
-
-- Keyboard-accessible action controls
-- Visible keyboard focus
-- Accessible button names and descriptions
-- ARIA keyboard shortcut annotations
-- Live statistics announcements
-- Reduced motion support
-- Accessible loading and error notifications
-
-## Request Timeout
+- Invalid requests
+- Unknown profiles
+- Duplicate swipe actions
+- Stale undo identifiers
+- Network failures
+- Request timeouts
+- Initial loading failures
 
 HTTP requests use a ten-second timeout.
 
-Timed-out requests preserve the last confirmed frontend
-history and require synchronization before additional
-mutation requests are allowed.
+If a mutation fails, the last confirmed frontend history
+is preserved. Further mutations are blocked until the
+user reloads the deck.
 
-Mutations are not retried automatically.
+Failed or timed-out mutations are not retried automatically.
 
-## Quality Assurance
+## Accessibility
 
-Quality verification includes automated tests, static
-code analysis, production builds, responsive checks,
-manual browser testing, and Lighthouse evaluation.
+The interface provides:
 
-Verification results are recorded in QUALITY_CHECKLIST.md.
+- Accessible button names
+- Keyboard shortcut annotations
+- Accessible scoring descriptions
+- Visible keyboard focus
+- Live statistics announcements
+- Error notifications
+- Reduced motion support
+- Responsive layouts
+
+Accessibility and responsive verification results are
+recorded in QUALITY_CHECKLIST.md.
+
+## Testing
+
+Make sure MongoDB is running before backend tests.
+
+### Frontend Tests
+
+    npm --prefix client run test
+
+The test suites cover state management, swipe gestures,
+keyboard controls, pointer controls, undo, API requests,
+persistence, request timeouts, and accessibility.
+
+### Backend Tests
+
+    npm --prefix server run test
+
+The backend tests verify database connectivity,
+profile retrieval, swipe persistence, validation,
+duplicate prevention, history ordering, and undo.
+
+### Linting
+
+    npm --prefix client run lint
+
+### Production Build
+
+    npm --prefix client run build
+
+### Production Preview
+
+    npm --prefix client run preview -- --host localhost --port 5174 --strictPort
+
+The backend must remain available when using the
+production preview.
+
+Actual test and Lighthouse results are recorded in
+QUALITY_CHECKLIST.md.
+
+## Development Process
+
+The project was divided into seven tasks.
+
+| Task | Description |
+| --- | --- |
+| T01 | Project setup and architecture |
+| T02 | Backend persistence API |
+| T03 | React deck and derived state |
+| T04 | Swipe controls and LIFO undo |
+| T05 | Full-stack integration |
+| T06 | Accessibility and reliability |
+| T07 | Documentation and defense |
+
+Development progress is tracked in TASK_DECOMPOSITION.md.
+
+Each completed task is recorded through a Git commit.
+
+## AI-Assisted Development
+
+AI was used to assist with implementation planning,
+code suggestions, explanations, and debugging.
+
+The suggested code was manually integrated and tested.
+
+Observed AI-related failures, corrections, and lessons
+learned are documented in AI_FAILURE_AUDIT.md.
+
+## Known Limitations
+
+- The application uses a fixed demonstration session.
+- Authentication is outside the assignment scope.
+- Multi-client transaction guarantees are not provided.
+- Profile illustrations are fictional SVG graphics.
+- Cancelling a frontend request does not guarantee
+  cancellation of the corresponding database operation.
+- Recovery depends on the database state available
+  when the history is reloaded.
+
+## Conclusion
+
+Almost Love demonstrates how event-driven interactions,
+derived React state, immutable updates, REST APIs,
+and MongoDB persistence can be combined in a full-stack
+web application.
+
+The project emphasizes correctness, maintainability,
+testing, and responsible AI-assisted development.

@@ -84,12 +84,4 @@
 - Request cancellation does not guarantee cancellation
   of a server-side database operation.
 
-## 9. Verification Evidence
 
-- Test execution:
-- Lint execution:
-- Production build:
-- Desktop screenshot:
-- Mobile screenshot:
-- Lighthouse report:
-- Verification date:
