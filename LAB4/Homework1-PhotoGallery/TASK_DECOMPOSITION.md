@@ -20,7 +20,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | T04 | Native Dialog Lightbox | DONE |
 | T05 | Accessibility and Responsive UI | DONE |
 | T06 | Performance and Regression | DONE |
-| T07 | Documentation and Defense | done |
+| T07 | Documentation and Defense | DONE |
 
 ## Application Contracts
 
@@ -273,4 +273,13 @@ For each feature:
 
 ## Verification Log
 
-No application verification results have been recorded yet. Results will be added after the corresponding checks are performed.
+| Check | Command | Actual result (2026-11-26) |
+| --- | --- | --- |
+| Automated tests | `npm test` | PASS — 7 test files, 60/60 tests |
+| ESLint | `npm run lint` | PASS — 0 errors, 0 warnings |
+| Production build | `npm run build` | PASS — 36 modules, JS 267.58 kB (gzip 84.84 kB), CSS 7.38 kB |
+| Lighthouse Performance (desktop) | Production preview (`npm run build` + `npm run preview`) | Not yet measured |
+| Lighthouse Performance (mobile) | Production preview | Not yet measured |
+| Manual keyboard, focus and reflow checks | Browser | Not yet recorded |
+
+Lighthouse scores must be measured manually in Chrome DevTools against the production preview and recorded here with the test conditions.

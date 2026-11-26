@@ -1,13 +1,10 @@
-import { forwardRef } from 'react'
-
-const PhotoDialog = forwardRef(function PhotoDialog(
-  {
-    photo,
-    onRequestClose,
-    onNativeClose,
-  },
+// React 19 passes ref as a regular prop, so forwardRef is not needed.
+export default function PhotoDialog({
   ref,
-) {
+  photo,
+  onRequestClose,
+  onNativeClose,
+}) {
   return (
     <dialog
       ref={ref}
@@ -51,6 +48,4 @@ const PhotoDialog = forwardRef(function PhotoDialog(
       )}
     </dialog>
   )
-})
-
-export default PhotoDialog
+}
