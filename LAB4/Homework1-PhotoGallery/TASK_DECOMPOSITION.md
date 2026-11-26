@@ -17,7 +17,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | T01 | Repository Setup, Contracts and Task Decomposition | DONE |
 | T02 | Multi-Route Layout and Gallery | DONE |
 | T03 | URL-Based Category Filtering | DONE |
-| T04 | Native Dialog Lightbox | TODO |
+| T04 | Native Dialog Lightbox | DONE |
 | T05 | Accessibility and Responsive UI | TODO |
 | T06 | Performance and Regression | TODO |
 | T07 | Documentation and Defense | TODO |
@@ -151,7 +151,7 @@ All images are demonstration assets, not real evidence.
 
 ## T04 — Native Dialog Lightbox
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Implement a URL-driven photo lightbox using the native HTML dialog element.
 

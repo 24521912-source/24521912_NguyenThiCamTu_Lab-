@@ -1,0 +1,122 @@
+.photo-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  overflow: hidden;
+}
+
+.photo-trigger img {
+  transition: transform 180ms ease;
+}
+
+.photo-trigger:hover img {
+  transform: scale(1.035);
+}
+
+.photo-trigger:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid #2563eb;
+  outline-offset: -4px;
+}
+
+.photo-dialog {
+  width: min(860px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid #dbe2ea;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #172334;
+  overflow: auto;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 25%);
+}
+
+.photo-dialog::backdrop {
+  background: rgb(15 23 42 / 78%);
+}
+
+.photo-dialog-content {
+  padding: 20px;
+}
+
+.photo-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.photo-dialog-header h2 {
+  margin: 0;
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
+  overflow-wrap: anywhere;
+}
+
+.dialog-close-button {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #64748b;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172334;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dialog-close-button:hover {
+  background: #e2e8f0;
+}
+
+.dialog-close-button:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.dialog-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 65dvh;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f1f5f9;
+}
+
+.dialog-category {
+  margin: 16px 0 0;
+  color: #475569;
+  font-size: 0.95rem;
+  text-transform: capitalize;
+}
+
+@media (max-width: 520px) {
+  .photo-dialog-content {
+    padding: 12px;
+  }
+
+  .photo-dialog-header {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-trigger img {
+    transition: none;
+  }
+
+  .photo-trigger:hover img {
+    transform: none;
+  }
+}
