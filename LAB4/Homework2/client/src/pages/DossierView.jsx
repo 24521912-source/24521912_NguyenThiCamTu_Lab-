@@ -1,9 +1,29 @@
 import { useMemo } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getDossierByPlayerID } from '../data/dossiers'
-import { computeMatrix } from '../utils/computeMatrix'
+import {
+  Link,
+  useParams,
+} from 'react-router-dom'
+
+import {
+  getDossierByPlayerID,
+} from '../data/dossiers'
+
+import {
+  getDemoDeadline,
+  getDemoServerTime,
+} from '../data/demoClock'
+
+import {
+  computeMatrix,
+} from '../utils/computeMatrix'
+
+import {
+  useAppealSlaTimer,
+} from '../hooks/useAppealSlaTimer'
+
 import DisproportionalityMatrix from '../components/DisproportionalityMatrix'
 import AppealForm from '../components/AppealForm'
+import SlaCountdown from '../components/SlaCountdown'
 import NotFound from './NotFound'
 
 export default function DossierView() {
@@ -17,6 +37,14 @@ export default function DossierView() {
     [dossierData]
   )
 
+  const deadlineMs =
+    getDemoDeadline(playerID)
+
+  const timer = useAppealSlaTimer({
+    deadlineMs,
+    getServerTime: getDemoServerTime,
+  })
+
   if (!dossierData) {
     return (
       <NotFound
@@ -26,12 +54,20 @@ export default function DossierView() {
     )
   }
 
+  const canAccessAppeal =
+    !timer.isExpired &&
+    !timer.isInvalid
+
   return (
     <>
       <div className="breadcrumb">
         <Link to="/">Overview</Link>
+
         <span aria-hidden="true">/</span>
-        <span>{dossierData.playerName}</span>
+
+        <span>
+          {dossierData.playerName}
+        </span>
       </div>
 
       <section className="dossier-header">
@@ -101,11 +137,28 @@ export default function DossierView() {
         matrix={matrix}
       />
 
-      <AppealForm
-        playerID={dossierData.playerID}
-        playerName={dossierData.playerName}
-        caseID={dossierData.caseID}
+      <SlaCountdown
+        timer={timer}
+        deadlineMs={deadlineMs}
       />
+
+      {canAccessAppeal ? (
+        <AppealForm
+          playerID={dossierData.playerID}
+          playerName={dossierData.playerName}
+          caseID={dossierData.caseID}
+        />
+      ) : (
+        <section className="panel empty-state">
+          <h2>Appeal unavailable</h2>
+
+          <p className="muted">
+            Appeals cannot be validated
+            outside an available appeal
+            window.
+          </p>
+        </section>
+      )}
     </>
   )
 }

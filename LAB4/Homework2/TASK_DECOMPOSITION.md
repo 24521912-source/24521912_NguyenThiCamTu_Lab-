@@ -17,7 +17,7 @@ All case records and evaluation values are fictional demonstration data. They do
 | T01 | Repository Setup and Architecture Contracts | DONE |
 | T02 | Dynamic Dossier Routing and Derived Matrix | DONE |
 | T03 | Appeal Form Context and Validation | DONE |
-| T04 | Zero-Drift SLA Countdown Hook | TODO |
+| T04 | Zero-Drift SLA Countdown Hook | DONE |
 | T05 | Full-Stack API and Persistence | TODO |
 | T06 | Accessibility and Regression Testing | TODO |
 | T07 | Documentation, Audit and Live Defense | TODO |
@@ -278,7 +278,7 @@ Runtime storage files must not be committed to Git.
 
 ### T04 — Zero-Drift SLA Countdown Hook
 
-**Status:** TODO
+**Status:** DONE
 
 **Prerequisite:** T03.
 
