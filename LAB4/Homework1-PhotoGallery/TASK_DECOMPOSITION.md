@@ -16,7 +16,7 @@ The following tasks represent the implementation plan, not an official numbered 
 |---|---|---|
 | T01 | Repository Setup, Contracts and Task Decomposition | DONE |
 | T02 | Multi-Route Layout and Gallery | DONE |
-| T03 | URL-Based Category Filtering | TODO |
+| T03 | URL-Based Category Filtering | DONE |
 | T04 | Native Dialog Lightbox | TODO |
 | T05 | Accessibility and Responsive UI | TODO |
 | T06 | Performance and Regression | TODO |
@@ -125,7 +125,7 @@ All images are demonstration assets, not real evidence.
 
 ## T03 — URL-Based Category Filtering
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Synchronize gallery filtering with URL search parameters.
 
