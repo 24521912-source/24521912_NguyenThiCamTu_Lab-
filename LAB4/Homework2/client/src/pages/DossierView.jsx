@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router-dom'
 import { getDossierByPlayerID } from '../data/dossiers'
 import { computeMatrix } from '../utils/computeMatrix'
 import DisproportionalityMatrix from '../components/DisproportionalityMatrix'
+import AppealForm from '../components/AppealForm'
 import NotFound from './NotFound'
 
 export default function DossierView() {
   const { playerID } = useParams()
 
-  const dossierData = getDossierByPlayerID(playerID)
+  const dossierData =
+    getDossierByPlayerID(playerID)
 
   const matrix = useMemo(
     () => computeMatrix(dossierData),
@@ -54,8 +56,9 @@ export default function DossierView() {
         <strong>Fictional case data</strong>
 
         <p>
-          This dossier is for academic demonstration
-          only and is not an official case assessment.
+          This dossier is for academic
+          demonstration only and is not an
+          official case assessment.
         </p>
       </div>
 
@@ -72,6 +75,7 @@ export default function DossierView() {
 
         <article className="stat-card">
           <p>Mean deviation</p>
+
           <strong>
             {matrix.overallDeviation === null
               ? 'N/A'
@@ -84,14 +88,24 @@ export default function DossierView() {
         className="panel"
         aria-labelledby="summary-heading"
       >
-        <h2 id="summary-heading">Case Overview</h2>
+        <h2 id="summary-heading">
+          Case Overview
+        </h2>
 
         <p className="muted">
           {dossierData.summary}
         </p>
       </section>
 
-      <DisproportionalityMatrix matrix={matrix} />
+      <DisproportionalityMatrix
+        matrix={matrix}
+      />
+
+      <AppealForm
+        playerID={dossierData.playerID}
+        playerName={dossierData.playerName}
+        caseID={dossierData.caseID}
+      />
     </>
   )
 }
