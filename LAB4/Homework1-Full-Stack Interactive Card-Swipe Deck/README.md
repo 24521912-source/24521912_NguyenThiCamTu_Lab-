@@ -125,14 +125,21 @@ Run the following commands from the project root.
 - T02: Backend persistence API completed.
 - T03: React card deck and derived state completed.
 - T04: Keyboard, pointer controls, and LIFO undo completed.
+- T05: Full-stack integration and persistence completed.
 
-The application supports button-based actions, keyboard
-shortcuts, pointer gestures, and local undo operations.
+The application retrieves profiles and swipe history
+from the backend.
 
-The score and remaining queue are derived from swipe history.
+Swipe and undo operations are persisted in MongoDB.
 
-Frontend API integration and persistent undo will be
-implemented in T05.
+The score and remaining queue are reconstructed from
+the stored history after a page reload.
+
+Mutation requests are serialized, and failed requests
+require synchronization before further interactions.
+
+Accessibility and reliability improvements will be
+implemented in T06.
 
 ## Swipe Scoring
 
@@ -147,13 +154,11 @@ It is not stored as independent React state.
 
 ## Frontend State Management
 
-Swipe history acts as the single source of truth.
+The application retrieves profiles and persisted swipe
+history from the backend by default.
 
-Remaining profiles and score are calculated using pure
-functions. State updates preserve immutability.
-
-The current frontend uses local fictional demo data.
-Database synchronization is planned for T05.
+Local profile data can be passed to the application
+for isolated component testing.
 
 ## Keyboard Controls
 
@@ -179,14 +184,56 @@ are ignored.
 
 ## Undo Behavior
 
-Undo follows the Last In, First Out principle.
+Undo is persisted in MongoDB.
 
-The latest swipe is removed from history, restoring
-its corresponding profile to the remaining queue.
+The frontend removes the latest history entry only
+after receiving a successful server response.
+## Available API Endpoints
 
-The score is recalculated from the updated history.
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | /api/health | Check server availability |
+| GET | /api/profiles | Retrieve profiles |
+| POST | /api/swipe | Create a swipe action |
+| GET | /api/swipe/history/:sessionId | Retrieve ordered history |
+| DELETE | /api/swipe/history/:sessionId/last | Undo the latest action |
+## Frontend Environment
 
-Undo is disabled when history is empty.
+Create the frontend environment file if it does not
+already exist.
 
-Swipe history is currently stored in local React state.
-Persistent history and undo are planned for T05.
+    Copy-Item client/.env.example client/.env
+
+The default API base URL is:
+
+    http://localhost:3001/api
+
+## Persistent Session
+
+The application uses a fixed local demo session:
+
+    local-demo-session
+
+Authentication and multi-user session management are
+outside the scope of this assignment.
+
+## Synchronization and Error Recovery
+
+Swipe and undo operations wait for server confirmation
+before updating the visible history.
+
+Additional mutation requests are blocked while an
+operation is pending.
+
+If a request fails, the application preserves its last
+confirmed history and requires a reload of the deck
+before accepting more actions.
+
+## Database Persistence
+
+MongoDB data is stored in a Docker named volume.
+
+Stopping or restarting the container preserves the data.
+
+Do not remove the database volume unless a complete
+database reset is intended.

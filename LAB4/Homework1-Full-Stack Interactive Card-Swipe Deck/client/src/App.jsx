@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 
 import SwipeDeck from './components/SwipeDeck.jsx';
-import demoProfiles from './data/profiles.js';
+import usePersistentDeck from './hooks/usePersistentDeck.js';
 
 import {
   SWIPE_ACTIONS,
@@ -19,15 +19,23 @@ const actionLabels = {
   [SWIPE_ACTIONS.SUPER_LIKE]: 'Super Like',
 };
 
-function App({ profiles = demoProfiles }) {
-  const [history, setHistory] = useState([]);
-
+function DeckView({
+  profiles,
+  history,
+  phase = 'ready',
+  error = '',
+  persistent = false,
+  onSwipe,
+  onUndo,
+  onReload,
+}) {
   const remainingProfiles = getRemainingProfiles(
     profiles,
     history,
   );
 
-  const currentProfile = remainingProfiles[0] ?? null;
+  const currentProfile =
+    remainingProfiles[0] ?? null;
 
   const score = calculateScore(history);
 
@@ -38,35 +46,7 @@ function App({ profiles = demoProfiles }) {
         ? 'negative-score'
         : '';
 
-  const handleSwipe = useCallback(
-    (action, profileId) => {
-      if (!profileId) {
-        return;
-      }
-
-      const entry = {
-        id: crypto.randomUUID(),
-        profileId,
-        action,
-        createdAt: new Date().toISOString(),
-      };
-
-      setHistory((previousHistory) =>
-        appendSwipe(
-          profiles,
-          previousHistory,
-          entry,
-        ),
-      );
-    },
-    [profiles],
-  );
-
-  const handleUndo = useCallback(() => {
-    setHistory((previousHistory) =>
-      undoLastSwipe(previousHistory),
-    );
-  }, []);
+  const disabled = phase !== 'ready';
 
   return (
     <main className="app-shell">
@@ -90,6 +70,55 @@ function App({ profiles = demoProfiles }) {
             SWIPE DECK
           </span>
         </header>
+
+        {persistent && (
+          <div
+            className="connection-status"
+            role="status"
+          >
+            <span
+              className={`connection-dot connection-${phase}`}
+              aria-hidden="true"
+            />
+
+            {phase === 'loading' &&
+              'Synchronizing with server...'}
+
+            {phase === 'ready' &&
+              'Synced with server'}
+
+            {phase === 'saving' &&
+              'Saving changes...'}
+
+            {phase === 'error' &&
+              'Synchronization required'}
+          </div>
+        )}
+
+        {error && (
+          <div
+            className="request-error"
+            role="alert"
+          >
+            <strong>
+              Unable to synchronize
+            </strong>
+
+            <p>{error}</p>
+
+            <p>
+              Reload the deck before continuing.
+            </p>
+
+            <button
+              type="button"
+              className="retry-button"
+              onClick={onReload}
+            >
+              Reload deck
+            </button>
+          </div>
+        )}
 
         <section
           className="stats-grid"
@@ -124,14 +153,34 @@ function App({ profiles = demoProfiles }) {
           </div>
         </section>
 
-        <SwipeDeck
-          profile={currentProfile}
-          remainingCount={remainingProfiles.length}
-          totalProfiles={profiles.length}
-          canUndo={history.length > 0}
-          onSwipe={handleSwipe}
-          onUndo={handleUndo}
-        />
+        {phase === 'loading' ? (
+          <section
+            className="loading-deck"
+            aria-label="Loading deck"
+            aria-busy="true"
+          >
+            <div
+              className="loading-spinner"
+              aria-hidden="true"
+            />
+
+            <h2>Loading profiles</h2>
+
+            <p>
+              Retrieving your latest swipe history.
+            </p>
+          </section>
+        ) : (
+          <SwipeDeck
+            profile={currentProfile}
+            remainingCount={remainingProfiles.length}
+            totalProfiles={profiles.length}
+            canUndo={history.length > 0}
+            disabled={disabled}
+            onSwipe={onSwipe}
+            onUndo={onUndo}
+          />
+        )}
 
         <section
           className="history-section"
@@ -212,6 +261,74 @@ function App({ profiles = demoProfiles }) {
       </div>
     </main>
   );
+}
+
+function LocalDeck({ profiles }) {
+  const [history, setHistory] = useState([]);
+
+  const handleSwipe = useCallback(
+    (action, profileId) => {
+      if (!profileId) {
+        return;
+      }
+
+      const entry = {
+        id: crypto.randomUUID(),
+        profileId,
+        action,
+        createdAt: new Date().toISOString(),
+      };
+
+      setHistory((previous) =>
+        appendSwipe(
+          profiles,
+          previous,
+          entry,
+        ),
+      );
+    },
+    [profiles],
+  );
+
+  const handleUndo = useCallback(() => {
+    setHistory((previous) =>
+      undoLastSwipe(previous),
+    );
+  }, []);
+
+  return (
+    <DeckView
+      profiles={profiles}
+      history={history}
+      onSwipe={handleSwipe}
+      onUndo={handleUndo}
+    />
+  );
+}
+
+function PersistentDeck() {
+  const deck = usePersistentDeck();
+
+  return (
+    <DeckView
+      profiles={deck.profiles}
+      history={deck.history}
+      phase={deck.phase}
+      error={deck.error}
+      persistent
+      onSwipe={deck.handleSwipe}
+      onUndo={deck.handleUndo}
+      onReload={deck.reloadDeck}
+    />
+  );
+}
+
+function App({ profiles }) {
+  if (profiles !== undefined) {
+    return <LocalDeck profiles={profiles} />;
+  }
+
+  return <PersistentDeck />;
 }
 
 export default App;

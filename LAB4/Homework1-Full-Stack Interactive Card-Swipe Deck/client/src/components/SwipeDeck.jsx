@@ -35,10 +35,12 @@ function SwipeDeck({
   remainingCount,
   totalProfiles,
   canUndo,
+  disabled = false,
   onSwipe,
   onUndo,
 }) {
-  const position = totalProfiles - remainingCount + 1;
+  const position =
+    totalProfiles - remainingCount + 1;
 
   return (
     <section
@@ -51,7 +53,11 @@ function SwipeDeck({
 
       <SwipeListeners
         key={profile?.id ?? 'empty'}
-        profileId={profile?.id ?? null}
+        profileId={
+          disabled
+            ? null
+            : profile?.id ?? null
+        }
         onSwipe={onSwipe}
         onUndo={onUndo}
       >
@@ -89,7 +95,7 @@ function SwipeDeck({
             type="button"
             className={`action-button ${item.className}`}
             aria-label={item.label}
-            disabled={!profile}
+            disabled={!profile || disabled}
             onClick={() =>
               onSwipe(item.action, profile.id)
             }
@@ -119,7 +125,7 @@ function SwipeDeck({
       <button
         type="button"
         className="undo-button"
-        disabled={!canUndo}
+        disabled={!canUndo || disabled}
         onClick={onUndo}
         aria-keyshortcuts="Backspace"
       >

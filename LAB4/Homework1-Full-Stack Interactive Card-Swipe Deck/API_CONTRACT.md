@@ -184,3 +184,29 @@ The following are additional project design decisions:
 - Duplicate prevention
 - Request serialization
 - Reload and error recovery
+## 15. Persistent History and Undo Contract
+
+GET /api/swipe/history/:sessionId returns an array of
+swipe actions ordered by createdAt and id in ascending
+order.
+
+DELETE /api/swipe/history/:sessionId/last accepts:
+
+    {
+      "expectedActionId": "action-id"
+    }
+
+A successful undo returns HTTP 200 and the deleted action.
+
+An empty history returns HTTP 404.
+An invalid action identifier returns HTTP 400.
+A stale action identifier returns HTTP 409.
+
+The frontend serializes mutation requests and updates
+history only after receiving a successful API response.
+
+If a request fails, mutation controls remain unavailable
+until the current database state is loaded again.
+
+The application uses a single local demo session and
+does not provide multi-client transaction guarantees.
