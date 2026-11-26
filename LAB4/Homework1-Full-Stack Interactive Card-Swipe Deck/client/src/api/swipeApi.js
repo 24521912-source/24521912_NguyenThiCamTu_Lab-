@@ -5,25 +5,67 @@ const API_BASE_URL = (
 
 export const SESSION_ID = 'local-demo-session';
 
+export const REQUEST_TIMEOUT_MS = 10000;
+
 async function request(path, options = {}) {
+  const controller = new AbortController();
+
+  const signal = options.signal
+    ? AbortSignal.any([
+        options.signal,
+        controller.signal,
+      ])
+    : controller.signal;
+
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, REQUEST_TIMEOUT_MS);
+
   let response;
+  let data;
 
   try {
     response = await fetch(
       `${API_BASE_URL}${path}`,
-      options,
+      {
+        ...options,
+        signal,
+      },
     );
+
+    data = await response.json().catch((error) => {
+      if (signal.aborted) {
+        throw error;
+      }
+
+      return null;
+    });
   } catch (error) {
-    if (error.name === 'AbortError') {
+    if (controller.signal.aborted) {
+      throw new Error(
+        'Request timed out. Please reload the deck.',
+        {
+          cause: error,
+        },
+      );
+    }
+
+    if (
+      options.signal?.aborted ||
+      error.name === 'AbortError'
+    ) {
       throw error;
     }
 
-    throw new Error('Unable to connect to the server', {
-      cause: error,
-    });
+    throw new Error(
+      'Unable to connect to the server',
+      {
+        cause: error,
+      },
+    );
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  const data = await response.json().catch(() => null);
 
   if (!response.ok) {
     throw new Error(

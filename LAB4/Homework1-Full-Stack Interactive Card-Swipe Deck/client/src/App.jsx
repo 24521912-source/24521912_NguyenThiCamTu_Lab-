@@ -12,7 +12,7 @@ import {
 } from './state/SwipeState.jsx';
 
 import './App.css';
-
+import './Responsive.css';
 const actionLabels = {
   [SWIPE_ACTIONS.PASS]: 'Pass',
   [SWIPE_ACTIONS.LIKE]: 'Like',

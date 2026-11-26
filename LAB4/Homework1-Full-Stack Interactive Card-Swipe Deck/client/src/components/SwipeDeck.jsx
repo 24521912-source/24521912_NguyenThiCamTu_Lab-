@@ -11,6 +11,7 @@ const actions = [
     className: 'pass-action',
     points: '-5 points',
     shortcut: '←',
+    keyboardShortcut: 'ArrowLeft',
   },
   {
     action: SWIPE_ACTIONS.SUPER_LIKE,
@@ -19,6 +20,7 @@ const actions = [
     className: 'super-action',
     points: '-5 points',
     shortcut: '↑',
+    keyboardShortcut: 'ArrowUp',
   },
   {
     action: SWIPE_ACTIONS.LIKE,
@@ -27,6 +29,7 @@ const actions = [
     className: 'like-action',
     points: '+10 points',
     shortcut: '→',
+    keyboardShortcut: 'ArrowRight',
   },
 ];
 
@@ -47,7 +50,10 @@ function SwipeDeck({
       className="deck-section"
       aria-label="Profile deck"
     >
-      <div className="gesture-hint">
+      <div
+        id="gesture-instructions"
+        className="gesture-hint"
+      >
         Drag the card or use your arrow keys.
       </div>
 
@@ -87,7 +93,9 @@ function SwipeDeck({
 
       <div
         className="swipe-actions"
+        role="group"
         aria-label="Swipe actions"
+        aria-describedby="gesture-instructions"
       >
         {actions.map((item) => (
           <button
@@ -95,6 +103,8 @@ function SwipeDeck({
             type="button"
             className={`action-button ${item.className}`}
             aria-label={item.label}
+            aria-keyshortcuts={item.keyboardShortcut}
+            aria-describedby={`points-${item.action}`}
             disabled={!profile || disabled}
             onClick={() =>
               onSwipe(item.action, profile.id)
@@ -111,7 +121,10 @@ function SwipeDeck({
               {item.label}
             </span>
 
-            <span className="action-points">
+            <span
+              id={`points-${item.action}`}
+              className="action-points"
+            >
               {item.points}
             </span>
 

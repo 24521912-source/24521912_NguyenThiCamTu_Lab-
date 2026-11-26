@@ -24,7 +24,7 @@ persistent data using Express and Mongoose 8.
 | T03 | React Deck and Derived State | DONE |
 | T04 | Swipe Controls and LIFO Undo | DONE |
 | T05 | Full-Stack Integration | DONE |
-| T06 | Accessibility and Reliability | TODO |
+| T06 | Accessibility and Reliability | DONE |
 | T07 | Documentation and Defense | TODO |
 
 ---

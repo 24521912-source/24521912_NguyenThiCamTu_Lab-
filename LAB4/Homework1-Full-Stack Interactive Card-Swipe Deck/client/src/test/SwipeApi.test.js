@@ -59,7 +59,9 @@ describe('Swipe API client', () => {
 
     expect(fetchMock).toHaveBeenCalledWith(
       expect.stringMatching(/\/api\/profiles$/),
-      expect.any(Object),
+      {
+        signal: expect.any(AbortSignal),
+      },
     );
   });
 
@@ -72,7 +74,9 @@ describe('Swipe API client', () => {
       expect.stringContaining(
         `/swipe/history/${SESSION_ID}`,
       ),
-      expect.any(Object),
+      {
+        signal: expect.any(AbortSignal),
+      },
     );
   });
 
@@ -95,6 +99,7 @@ describe('Swipe API client', () => {
           profileId: profile.id,
           action: 'LIKE',
         }),
+        signal: expect.any(AbortSignal),
       },
     );
   });
@@ -118,6 +123,7 @@ describe('Swipe API client', () => {
         body: JSON.stringify({
           expectedActionId: swipe.id,
         }),
+        signal: expect.any(AbortSignal),
       },
     );
   });
@@ -138,18 +144,20 @@ describe('Swipe API client', () => {
   });
 
   it('handles network failures', async () => {
+    const originalError =
+      new TypeError('Failed to fetch');
+
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockRejectedValue(
-        new TypeError('Failed to fetch'),
-      ),
+      vi.fn().mockRejectedValue(originalError),
     );
 
     await expect(
       getProfiles(),
-    ).rejects.toThrow(
-      'Unable to connect to the server',
-    );
+    ).rejects.toMatchObject({
+      message: 'Unable to connect to the server',
+      cause: originalError,
+    });
   });
 
   it('rejects invalid profile responses', async () => {

@@ -126,20 +126,14 @@ Run the following commands from the project root.
 - T03: React card deck and derived state completed.
 - T04: Keyboard, pointer controls, and LIFO undo completed.
 - T05: Full-stack integration and persistence completed.
+- T06: Accessibility and reliability improvements completed.
 
-The application retrieves profiles and swipe history
-from the backend.
+The application supports responsive layouts, accessible
+controls, persistent swipe history, request timeout
+handling, and synchronization recovery.
 
-Swipe and undo operations are persisted in MongoDB.
-
-The score and remaining queue are reconstructed from
-the stored history after a page reload.
-
-Mutation requests are serialized, and failed requests
-require synchronization before further interactions.
-
-Accessibility and reliability improvements will be
-implemented in T06.
+Final documentation and assignment defense preparation
+will be completed in T07.
 
 ## Swipe Scoring
 
@@ -237,3 +231,30 @@ Stopping or restarting the container preserves the data.
 
 Do not remove the database volume unless a complete
 database reset is intended.
+## Accessibility
+
+- Keyboard-accessible action controls
+- Visible keyboard focus
+- Accessible button names and descriptions
+- ARIA keyboard shortcut annotations
+- Live statistics announcements
+- Reduced motion support
+- Accessible loading and error notifications
+
+## Request Timeout
+
+HTTP requests use a ten-second timeout.
+
+Timed-out requests preserve the last confirmed frontend
+history and require synchronization before additional
+mutation requests are allowed.
+
+Mutations are not retried automatically.
+
+## Quality Assurance
+
+Quality verification includes automated tests, static
+code analysis, production builds, responsive checks,
+manual browser testing, and Lighthouse evaluation.
+
+Verification results are recorded in QUALITY_CHECKLIST.md.

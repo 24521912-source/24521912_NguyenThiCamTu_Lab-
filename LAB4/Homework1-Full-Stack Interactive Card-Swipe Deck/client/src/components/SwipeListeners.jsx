@@ -18,7 +18,7 @@ function isEditableTarget(target) {
     target.isContentEditable ||
     Boolean(
       target.closest(
-        'input, textarea, select, [contenteditable="true"]',
+        'input, textarea, select, [contenteditable="true"], [contenteditable=""], [contenteditable="plaintext-only"]',
       ),
     )
   );
@@ -47,6 +47,7 @@ export default function SwipeListeners({
         event.ctrlKey ||
         event.altKey ||
         event.metaKey ||
+        event.shiftKey ||
         isEditableTarget(event.target)
       ) {
         return;
@@ -55,6 +56,13 @@ export default function SwipeListeners({
       const action = keyboardActions[event.key];
 
       if (!action && event.key !== 'Backspace') {
+        return;
+      }
+
+      if (
+        !profileId &&
+        event.key !== 'Backspace'
+      ) {
         return;
       }
 
@@ -69,9 +77,7 @@ export default function SwipeListeners({
         return;
       }
 
-      if (profileId) {
-        onSwipe(action, profileId);
-      }
+      onSwipe(action, profileId);
     }
 
     window.addEventListener('keydown', handleKeyDown);
@@ -126,6 +132,11 @@ export default function SwipeListeners({
       return;
     }
 
+    if (start.profileId !== profileId) {
+      resetPointer();
+      return;
+    }
+
     setOffset({
       x: event.clientX - start.x,
       y: event.clientY - start.y,
@@ -156,7 +167,10 @@ export default function SwipeListeners({
       );
     }
 
-    if (action) {
+    if (
+      action &&
+      start.profileId === profileId
+    ) {
       onSwipe(action, start.profileId);
     }
   }
@@ -185,16 +199,18 @@ export default function SwipeListeners({
     Math.min(15, offset.x / 15),
   );
 
-  const transform = dragging
-    ? `translate(${offset.x}px, ${offset.y}px) rotate(${rotation}deg)`
-    : undefined;
+  const transform =
+    dragging && profileId
+      ? `translate(${offset.x}px, ${offset.y}px) rotate(${rotation}deg)`
+      : undefined;
 
   return (
     <div
       className={`swipe-surface ${
-        dragging ? 'is-dragging' : ''
+        dragging && profileId ? 'is-dragging' : ''
       }`}
       data-testid="swipe-surface"
+      aria-disabled={!profileId}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={handlePointerUp}
@@ -208,7 +224,7 @@ export default function SwipeListeners({
       >
         {children}
 
-        {dragging && previewAction && (
+        {dragging && profileId && previewAction && (
           <span
             className={`swipe-preview preview-${previewAction.toLowerCase()}`}
             aria-hidden="true"
