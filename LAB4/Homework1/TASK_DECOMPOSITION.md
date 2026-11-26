@@ -15,7 +15,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | ID | Task | Status |
 |---|---|---|
 | T01 | Repository Setup, Contracts and Task Decomposition | DONE |
-| T02 | Multi-Route Layout and Gallery | TODO |
+| T02 | Multi-Route Layout and Gallery | DONE |
 | T03 | URL-Based Category Filtering | TODO |
 | T04 | Native Dialog Lightbox | TODO |
 | T05 | Accessibility and Responsive UI | TODO |
@@ -99,7 +99,7 @@ All images are demonstration assets, not real evidence.
 
 ## T02 — Multi-Route Layout and Gallery
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Build the shared layout, navigation and responsive photo gallery.
 

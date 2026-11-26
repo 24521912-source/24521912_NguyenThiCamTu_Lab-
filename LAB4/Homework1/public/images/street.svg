@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200" height="800"
+     viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#d9c9b7"/>
+  <path d="M0 800 V90 L460 300 V800 Z"
+        fill="#9c7664"/>
+  <path d="M1200 800 V70 L740 300 V800 Z"
+        fill="#7b8c96"/>
+  <path d="M270 800 L550 360 H650 L950 800 Z"
+        fill="#65717b"/>
+  <g fill="#f5dfb7">
+    <rect x="70" y="210" width="80" height="110"/>
+    <rect x="230" y="280" width="70" height="100"/>
+    <rect x="1040" y="200" width="80" height="110"/>
+    <rect x="880" y="280" width="70" height="100"/>
+  </g>
+  <path d="M600 440 V510 M600 570 V660 M600 720 V800"
+        stroke="#f3e7bd" stroke-width="12"/>
+</svg>
