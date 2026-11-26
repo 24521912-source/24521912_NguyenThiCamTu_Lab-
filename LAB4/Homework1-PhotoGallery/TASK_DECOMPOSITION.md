@@ -18,7 +18,7 @@ The following tasks represent the implementation plan, not an official numbered 
 | T02 | Multi-Route Layout and Gallery | DONE |
 | T03 | URL-Based Category Filtering | DONE |
 | T04 | Native Dialog Lightbox | DONE |
-| T05 | Accessibility and Responsive UI | TODO |
+| T05 | Accessibility and Responsive UI | DONE |
 | T06 | Performance and Regression | TODO |
 | T07 | Documentation and Defense | TODO |
 
@@ -178,7 +178,7 @@ All images are demonstration assets, not real evidence.
 
 ## T05 — Accessibility and Responsive UI
 
-**Status:** TODO
+**Status:** DONE
 
 **Objective:** Improve keyboard accessibility, focus management and responsive layout.
 

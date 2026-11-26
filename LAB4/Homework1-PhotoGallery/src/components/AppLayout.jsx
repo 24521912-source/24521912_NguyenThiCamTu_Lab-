@@ -1,15 +1,35 @@
 import { NavLink, Outlet } from 'react-router'
+import RouteAccessibility from './RouteAccessibility'
+import '../styles/accessibility.css'
 
 export default function AppLayout() {
+  function handleSkipNavigation(event) {
+    event.preventDefault()
+
+    const mainContent =
+      document.getElementById('main-content')
+
+    mainContent?.focus()
+  }
+
   return (
     <div className="app-shell">
-      <a className="skip-link" href="#main-content">
+      <RouteAccessibility />
+
+      <a
+        className="skip-link"
+        href="#main-content"
+        onClick={handleSkipNavigation}
+      >
         Skip to main content
       </a>
 
       <header className="site-header">
         <div className="container header-content">
-          <NavLink to="/" className="brand">
+          <NavLink
+            to="/"
+            className="brand"
+          >
             FrameGallery
           </NavLink>
 
@@ -48,7 +68,7 @@ export default function AppLayout() {
       <footer className="site-footer">
         <div className="container">
           <p>
-            FrameGallery — Demonstration photo collection
+            FrameGallery — Demonstration photo collection.
           </p>
         </div>
       </footer>

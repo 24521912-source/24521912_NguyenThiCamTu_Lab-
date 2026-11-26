@@ -1,0 +1,147 @@
+/* Accessible keyboard focus */
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  min-height: 44px;
+  padding: 12px 20px;
+  border: 2px solid #172334;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #172334;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.skip-link:focus {
+  top: 12px;
+  transform: translateY(0);
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.main-content:focus-visible,
+#gallery-heading:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 4px;
+}
+
+/* Accessible interaction targets */
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.navigation a,
+.primary-link,
+.category-button,
+.dialog-close-button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.navigation a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+
+.category-button[aria-pressed="true"] {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}
+
+/* Responsive content */
+
+.header-content,
+.main-content,
+.photo-card,
+.feature-card,
+.information-page {
+  min-width: 0;
+}
+
+.photo-card h2,
+.feature-card h2,
+.information-page,
+.page-description {
+  overflow-wrap: anywhere;
+}
+
+.photo-trigger {
+  min-height: 44px;
+}
+
+@media (max-width: 520px) {
+  .container {
+    width: calc(100% - 32px);
+  }
+
+  .header-content {
+    gap: 8px;
+  }
+
+  .navigation {
+    gap: 4px;
+  }
+
+  .navigation a {
+    padding-inline: 10px;
+  }
+
+  .main-content {
+    padding-block: 28px;
+  }
+
+  .category-filter {
+    gap: 8px;
+  }
+
+  .category-button {
+    flex: 1 1 auto;
+  }
+
+  .photo-grid,
+  .feature-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Respect reduced motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .photo-trigger:hover img {
+    transform: none;
+  }
+}
+
+/* Support operating system high contrast mode */
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+
+  .category-button[aria-pressed="true"] {
+    border: 2px solid Highlight;
+  }
+
+  .photo-trigger:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: -4px;
+  }
+}
