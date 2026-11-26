@@ -1,4 +1,6 @@
 import ProfileCard from './ProfileCard.jsx';
+import SwipeListeners from './SwipeListeners.jsx';
+
 import { SWIPE_ACTIONS } from '../state/SwipeState.jsx';
 
 const actions = [
@@ -8,6 +10,7 @@ const actions = [
     symbol: '×',
     className: 'pass-action',
     points: '-5 points',
+    shortcut: '←',
   },
   {
     action: SWIPE_ACTIONS.SUPER_LIKE,
@@ -15,6 +18,7 @@ const actions = [
     symbol: '★',
     className: 'super-action',
     points: '-5 points',
+    shortcut: '↑',
   },
   {
     action: SWIPE_ACTIONS.LIKE,
@@ -22,6 +26,7 @@ const actions = [
     symbol: '♥',
     className: 'like-action',
     points: '+10 points',
+    shortcut: '→',
   },
 ];
 
@@ -29,7 +34,9 @@ function SwipeDeck({
   profile,
   remainingCount,
   totalProfiles,
+  canUndo,
   onSwipe,
+  onUndo,
 }) {
   const position = totalProfiles - remainingCount + 1;
 
@@ -38,26 +45,39 @@ function SwipeDeck({
       className="deck-section"
       aria-label="Profile deck"
     >
-      {profile ? (
-        <ProfileCard
-          key={profile.id}
-          profile={profile}
-          position={position}
-          total={totalProfiles}
-        />
-      ) : (
-        <div className="empty-deck" role="status">
-          <div className="empty-icon" aria-hidden="true">
-            ✓
+      <div className="gesture-hint">
+        Drag the card or use your arrow keys.
+      </div>
+
+      <SwipeListeners
+        key={profile?.id ?? 'empty'}
+        profileId={profile?.id ?? null}
+        onSwipe={onSwipe}
+        onUndo={onUndo}
+      >
+        {profile ? (
+          <ProfileCard
+            profile={profile}
+            position={position}
+            total={totalProfiles}
+          />
+        ) : (
+          <div className="empty-deck" role="status">
+            <div
+              className="empty-icon"
+              aria-hidden="true"
+            >
+              ✓
+            </div>
+
+            <h2>No profiles remaining</h2>
+
+            <p>
+              Undo your latest swipe to restore a profile.
+            </p>
           </div>
-
-          <h2>No profiles remaining</h2>
-
-          <p>
-            You have reached the end of the deck.
-          </p>
-        </div>
-      )}
+        )}
+      </SwipeListeners>
 
       <div
         className="swipe-actions"
@@ -70,7 +90,9 @@ function SwipeDeck({
             className={`action-button ${item.className}`}
             aria-label={item.label}
             disabled={!profile}
-            onClick={() => onSwipe(item.action)}
+            onClick={() =>
+              onSwipe(item.action, profile.id)
+            }
           >
             <span
               className="action-symbol"
@@ -86,9 +108,27 @@ function SwipeDeck({
             <span className="action-points">
               {item.points}
             </span>
+
+            <kbd aria-hidden="true">
+              {item.shortcut}
+            </kbd>
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        className="undo-button"
+        disabled={!canUndo}
+        onClick={onUndo}
+        aria-keyshortcuts="Backspace"
+      >
+        <span aria-hidden="true">↶</span>
+
+        <span>Undo last swipe</span>
+
+        <kbd aria-hidden="true">Backspace</kbd>
+      </button>
     </section>
   );
 }

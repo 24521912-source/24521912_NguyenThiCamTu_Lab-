@@ -118,23 +118,21 @@ Run the following commands from the project root.
 ### Database
 
     docker compose ps
+
 ## Project Status
 
 - T01: Project setup and architecture completed.
 - T02: Backend persistence API completed.
 - T03: React card deck and derived state completed.
+- T04: Keyboard, pointer controls, and LIFO undo completed.
 
-The frontend displays fictional demo profiles and supports
-button-based swipe actions.
+The application supports button-based actions, keyboard
+shortcuts, pointer gestures, and local undo operations.
 
-The remaining queue, score, and swipe count are derived
-from swipe history.
+The score and remaining queue are derived from swipe history.
 
-Keyboard controls, pointer gestures, and LIFO undo will
-be implemented in T04.
-
-Frontend API integration and reload persistence will
-be implemented in T05.
+Frontend API integration and persistent undo will be
+implemented in T05.
 
 ## Swipe Scoring
 
@@ -156,3 +154,39 @@ functions. State updates preserve immutability.
 
 The current frontend uses local fictional demo data.
 Database synchronization is planned for T05.
+
+## Keyboard Controls
+
+| Key | Action |
+| --- | --- |
+| ArrowLeft | Pass |
+| ArrowRight | Like |
+| ArrowUp | Super Like |
+| Backspace | Undo last swipe |
+
+Repeated keyboard events and editable input targets
+are ignored.
+
+## Pointer Controls
+
+- Drag right to Like.
+- Drag left to Pass.
+- Drag upward to Super Like.
+- Movement must exceed 50 pixels.
+- The dominant axis determines the gesture direction.
+- Short, downward, cancelled, and equally diagonal
+  gestures are ignored.
+
+## Undo Behavior
+
+Undo follows the Last In, First Out principle.
+
+The latest swipe is removed from history, restoring
+its corresponding profile to the remaining queue.
+
+The score is recalculated from the updated history.
+
+Undo is disabled when history is empty.
+
+Swipe history is currently stored in local React state.
+Persistent history and undo are planned for T05.

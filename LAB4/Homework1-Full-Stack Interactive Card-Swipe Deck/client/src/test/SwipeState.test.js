@@ -5,8 +5,8 @@ import {
   getRemainingProfiles,
   calculateScore,
   appendSwipe,
+  undoLastSwipe,
 } from '../state/SwipeState.jsx';
-
 const profiles = [
   { id: 'profile-01', name: 'Emma' },
   { id: 'profile-02', name: 'Alex' },
@@ -203,5 +203,133 @@ describe('appendSwipe', () => {
     );
 
     expect(appendSwipe([], history, entry)).toBe(history);
+  });
+});
+describe('undoLastSwipe', () => {
+  it('returns the same history when it is empty', () => {
+    const history = [];
+
+    expect(undoLastSwipe(history)).toBe(history);
+  });
+
+  it('removes only the latest action', () => {
+    const history = [
+      createEntry(
+        'profile-01',
+        SWIPE_ACTIONS.LIKE,
+        'action-01',
+      ),
+      createEntry(
+        'profile-02',
+        SWIPE_ACTIONS.PASS,
+        'action-02',
+      ),
+    ];
+
+    expect(undoLastSwipe(history)).toEqual([
+      history[0],
+    ]);
+  });
+
+  it('does not mutate the original history', () => {
+    const history = Object.freeze([
+      createEntry(
+        'profile-01',
+        SWIPE_ACTIONS.LIKE,
+      ),
+    ]);
+
+    const result = undoLastSwipe(history);
+
+    expect(history).toHaveLength(1);
+    expect(result).toEqual([]);
+  });
+
+  it('restores the latest profile to the queue', () => {
+    const history = [
+      createEntry(
+        'profile-01',
+        SWIPE_ACTIONS.LIKE,
+        'action-01',
+      ),
+      createEntry(
+        'profile-02',
+        SWIPE_ACTIONS.PASS,
+        'action-02',
+      ),
+    ];
+
+    const restoredHistory = undoLastSwipe(history);
+
+    expect(
+      getRemainingProfiles(
+        profiles,
+        restoredHistory,
+      ),
+    ).toEqual([
+      profiles[1],
+      profiles[2],
+    ]);
+  });
+
+  it('recalculates the score after undo', () => {
+    const history = [
+      createEntry(
+        'profile-01',
+        SWIPE_ACTIONS.LIKE,
+        'action-01',
+      ),
+      createEntry(
+        'profile-02',
+        SWIPE_ACTIONS.PASS,
+        'action-02',
+      ),
+    ];
+
+    expect(calculateScore(history)).toBe(5);
+
+    expect(
+      calculateScore(undoLastSwipe(history)),
+    ).toBe(10);
+  });
+
+  it('restores profiles in LIFO order', () => {
+    const history = [
+      createEntry(
+        'profile-01',
+        SWIPE_ACTIONS.LIKE,
+        'action-01',
+      ),
+      createEntry(
+        'profile-02',
+        SWIPE_ACTIONS.PASS,
+        'action-02',
+      ),
+      createEntry(
+        'profile-03',
+        SWIPE_ACTIONS.SUPER_LIKE,
+        'action-03',
+      ),
+    ];
+
+    const firstUndo = undoLastSwipe(history);
+
+    expect(
+      getRemainingProfiles(profiles, firstUndo)[0].id,
+    ).toBe('profile-03');
+
+    const secondUndo = undoLastSwipe(firstUndo);
+
+    expect(
+      getRemainingProfiles(profiles, secondUndo)[0].id,
+    ).toBe('profile-02');
+
+    const thirdUndo = undoLastSwipe(secondUndo);
+
+    expect(
+      getRemainingProfiles(profiles, thirdUndo)[0].id,
+    ).toBe('profile-01');
+
+    expect(calculateScore(thirdUndo)).toBe(0);
   });
 });

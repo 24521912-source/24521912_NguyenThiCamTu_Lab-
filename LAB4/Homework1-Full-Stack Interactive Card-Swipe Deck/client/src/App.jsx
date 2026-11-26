@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import SwipeDeck from './components/SwipeDeck.jsx';
 import demoProfiles from './data/profiles.js';
@@ -8,6 +8,7 @@ import {
   appendSwipe,
   calculateScore,
   getRemainingProfiles,
+  undoLastSwipe,
 } from './state/SwipeState.jsx';
 
 import './App.css';
@@ -27,6 +28,7 @@ function App({ profiles = demoProfiles }) {
   );
 
   const currentProfile = remainingProfiles[0] ?? null;
+
   const score = calculateScore(history);
 
   const scoreClass =
@@ -36,29 +38,45 @@ function App({ profiles = demoProfiles }) {
         ? 'negative-score'
         : '';
 
-  function handleSwipe(action) {
-    if (!currentProfile) {
-      return;
-    }
+  const handleSwipe = useCallback(
+    (action, profileId) => {
+      if (!profileId) {
+        return;
+      }
 
-    const entry = {
-      id: crypto.randomUUID(),
-      profileId: currentProfile.id,
-      action,
-      createdAt: new Date().toISOString(),
-    };
+      const entry = {
+        id: crypto.randomUUID(),
+        profileId,
+        action,
+        createdAt: new Date().toISOString(),
+      };
 
+      setHistory((previousHistory) =>
+        appendSwipe(
+          profiles,
+          previousHistory,
+          entry,
+        ),
+      );
+    },
+    [profiles],
+  );
+
+  const handleUndo = useCallback(() => {
     setHistory((previousHistory) =>
-      appendSwipe(profiles, previousHistory, entry),
+      undoLastSwipe(previousHistory),
     );
-  }
+  }, []);
 
   return (
     <main className="app-shell">
       <div className="app-container">
         <header className="app-header">
           <div className="brand">
-            <span className="brand-icon" aria-hidden="true">
+            <span
+              className="brand-icon"
+              aria-hidden="true"
+            >
               ♥
             </span>
 
@@ -68,7 +86,9 @@ function App({ profiles = demoProfiles }) {
             </div>
           </div>
 
-          <span className="app-tag">SWIPE DECK</span>
+          <span className="app-tag">
+            SWIPE DECK
+          </span>
         </header>
 
         <section
@@ -108,7 +128,9 @@ function App({ profiles = demoProfiles }) {
           profile={currentProfile}
           remainingCount={remainingProfiles.length}
           totalProfiles={profiles.length}
+          canUndo={history.length > 0}
           onSwipe={handleSwipe}
+          onUndo={handleUndo}
         />
 
         <section
@@ -116,11 +138,15 @@ function App({ profiles = demoProfiles }) {
           aria-labelledby="history-title"
         >
           <div className="history-header">
-            <h2 id="history-title">Swipe history</h2>
+            <h2 id="history-title">
+              Swipe history
+            </h2>
 
             <span>
               {history.length}{' '}
-              {history.length === 1 ? 'action' : 'actions'}
+              {history.length === 1
+                ? 'action'
+                : 'actions'}
             </span>
           </div>
 
@@ -132,14 +158,18 @@ function App({ profiles = demoProfiles }) {
             <ul className="history-list">
               {[...history].reverse().map((entry) => {
                 const profile = profiles.find(
-                  (item) => item.id === entry.profileId,
+                  (item) =>
+                    item.id === entry.profileId,
                 );
 
                 const isLike =
                   entry.action === SWIPE_ACTIONS.LIKE;
 
                 return (
-                  <li key={entry.id} className="history-item">
+                  <li
+                    key={entry.id}
+                    className="history-item"
+                  >
                     <div className="history-profile">
                       <span
                         className="history-avatar"
@@ -150,7 +180,8 @@ function App({ profiles = demoProfiles }) {
 
                       <div>
                         <strong>
-                          {profile?.name || 'Unknown profile'}
+                          {profile?.name ||
+                            'Unknown profile'}
                         </strong>
 
                         <span>

@@ -52,3 +52,11 @@ export function appendSwipe(profiles, history, entry) {
 
   return [...history, entry];
 }
+
+export function undoLastSwipe(history) {
+  if (history.length === 0) {
+    return history;
+  }
+
+  return history.slice(0, -1);
+}
