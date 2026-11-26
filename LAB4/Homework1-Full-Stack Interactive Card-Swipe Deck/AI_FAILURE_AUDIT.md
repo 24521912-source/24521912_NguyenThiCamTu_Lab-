@@ -1,4 +1,4 @@
-## Incident XX – Missing Error Cause in API Error Handling
+## Incident 01 – Missing Error Cause in API Error Handling
 
 - **Task:** T05 – Full-Stack Integration
 - **Affected file:** `client/src/api/swipeApi.js`
@@ -40,7 +40,7 @@ throw new Error('Unable to connect to the server', {
 ### Verification
 
 - Before the fix: 84/84 tests passed, but ESLint reported one error.
-- After the fix: [Insert actual lint, test, and build results.]
+- After the fix: ESLint reported 0 errors and 0 warnings; frontend tests 99/99 passed (9 files); backend tests 23/23 passed; production build succeeded (re-verified 2026-11-26).
 
 ### Lesson Learned
 
