@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import {
   AppStateContext,
@@ -15,6 +15,10 @@ export function AppProvider({ children }) {
     appReducer,
     initialState,
   );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = state.theme;
+  }, [state.theme]);
 
   return (
     <AppStateContext.Provider value={state}>

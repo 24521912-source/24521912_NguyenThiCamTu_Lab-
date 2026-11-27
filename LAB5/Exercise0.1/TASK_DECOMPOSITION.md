@@ -42,7 +42,7 @@ WebSockets and later Lab 5 exercises are outside the scope.
 | T01 | Repository setup, React scaffold and governance | DONE |
 | T02 | Pure reducer, initial state and unit tests | DONE |
 | T03 | Split Context, AppProvider and consumer hooks | DONE |
-| T04 | Theme synchronization and tab navigation UI | TODO |
+| T04 | Theme synchronization and tab navigation UI | DONE |
 | T05 | Render isolation, accessibility and regression tests | TODO |
 | T06 | Documentation, audit review and live defense | TODO |
 
@@ -269,7 +269,7 @@ feat(ex0.1): implement split context provider
 
 ### T04 — Theme and Tab Controls
 
-**Status:** TODO
+**Status:** DONE
 
 **Prerequisites:** T03
 
