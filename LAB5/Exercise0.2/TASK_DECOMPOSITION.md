@@ -19,7 +19,7 @@ The exercise is implemented independently from Exercise 0.1. The EvidenceGrid co
 | T03 | EvidenceGrid, EvidenceCard and pagination controls | T02 | DONE |
 | T04 | Responsive container queries and accessibility | T03 | DONE |
 | T05 | Edge cases and regression tests | T04 | DONE |
-| T06 | README, audit review and live defense | T05 | TODO |
+| T06 | README, audit review and live defense | T05 | done|
 
 Status values: TODO, IN PROGRESS, BLOCKED, DONE.
 
