@@ -24,11 +24,13 @@ describe('Project environment', () => {
     ).toBeInTheDocument()
   })
 
-  it('displays the initial project status', () => {
+  it('renders the evidence collection', () => {
     render(<App />)
 
     expect(
-      screen.getByText('Project environment is ready.'),
+      screen.getByRole('heading', {
+        name: 'Evidence Collection',
+      }),
     ).toBeInTheDocument()
   })
 })

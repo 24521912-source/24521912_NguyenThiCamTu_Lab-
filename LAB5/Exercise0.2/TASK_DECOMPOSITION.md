@@ -16,7 +16,7 @@ The exercise is implemented independently from Exercise 0.1. The EvidenceGrid co
 |---|---|---|---|
 | T01 | Project setup, rules and task plan | None | DONE |
 | T02 | Pure derived pagination and unit tests | T01 | done |
-| T03 | EvidenceGrid, EvidenceCard and pagination controls | T02 | TODO |
+| T03 | EvidenceGrid, EvidenceCard and pagination controls | T02 | DONE |
 | T04 | Responsive container queries and accessibility | T03 | TODO |
 | T05 | Edge cases and regression tests | T04 | TODO |
 | T06 | README, audit review and live defense | T05 | TODO |
@@ -385,7 +385,7 @@ Do not stage unrelated exercises, node_modules, dist, environment files, or cred
 
 - [x] T01 — Project environment and task plan are ready.
 - [x] T02 — Pure pagination logic and unit tests are complete.
-- [ ] T03 — Evidence components and controlled navigation work.
+- [x] T03 — Evidence components and controlled navigation work.
 - [ ] T04 — Responsive container queries and accessibility are implemented.
 - [ ] T05 — Regression tests and manual browser checks are complete.
 - [ ] T06 — Documentation, audit review, and defense preparation are complete.
