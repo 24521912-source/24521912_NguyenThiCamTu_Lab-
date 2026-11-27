@@ -40,7 +40,7 @@ WebSockets and later Lab 5 exercises are outside the scope.
 | ID | Task | Status |
 | --- | --- | --- |
 | T01 | Repository setup, React scaffold and governance | DONE |
-| T02 | Pure reducer, initial state and unit tests | TODO |
+| T02 | Pure reducer, initial state and unit tests | DONE |
 | T03 | Split Context, AppProvider and consumer hooks | TODO |
 | T04 | Theme synchronization and tab navigation UI | TODO |
 | T05 | Render isolation, accessibility and regression tests | TODO |
@@ -167,7 +167,7 @@ chore(ex0.1): initialize project and task plan
 
 ### T02 — Pure Reducer and Unit Tests
 
-**Status:** TODO
+**Status:** DONE
 
 **Prerequisites:** T01
 
