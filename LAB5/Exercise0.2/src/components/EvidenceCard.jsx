@@ -4,13 +4,16 @@ export default function EvidenceCard({ clip }) {
       className="evidence-card"
       data-clip-id={clip._id}
     >
-      <div
-        className="evidence-thumbnail"
-        aria-hidden="true"
-      >
-        <span className="thumbnail-icon">▶</span>
+      <div className="evidence-thumbnail">
+        <span
+          className="thumbnail-icon"
+          aria-hidden="true"
+        >
+          ▶
+        </span>
 
         <span className="evidence-duration">
+          <span className="sr-only">Duration: </span>
           {clip.duration}
         </span>
       </div>
